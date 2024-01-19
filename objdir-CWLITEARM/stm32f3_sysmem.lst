@@ -1,0 +1,200 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"stm32f3_sysmem.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text._sbrk,"ax",%progbits
+  16              		.align	1
+  17              		.global	_sbrk
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	_sbrk:
+  25              	.LVL0:
+  26              	.LFB3:
+  27              		.file 1 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c"
+   1:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** /**
+   2:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** *****************************************************************************
+   3:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+   4:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **  File        : sysmem.c
+   5:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+   6:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **  Author	    : Ac6
+   7:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+   8:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **  Abstract    : System Workbench Minimal System Memory calls file
+   9:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+  10:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** 		          For more information about which c-functions
+  11:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **                need which of these lowlevel functions
+  12:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **                please consult the Newlib libc-manual
+  13:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+  14:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **  Environment : System Workbench for MCU
+  15:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+  16:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **  Distribution: The file is distributed �as is,� without any warranty
+  17:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **                of any kind.
+  18:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+  19:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** *****************************************************************************
+  20:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+  21:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** <h2><center>&copy; COPYRIGHT(c) 2014 Ac6</center></h2>
+  22:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+  23:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** Redistribution and use in source and binary forms, with or without modification,
+  24:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** are permitted provided that the following conditions are met:
+  25:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **   1. Redistributions of source code must retain the above copyright notice,
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **      this list of conditions and the following disclaimer.
+  27:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **   2. Redistributions in binary form must reproduce the above copyright notice,
+  28:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **      this list of conditions and the following disclaimer in the documentation
+  29:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **      and/or other materials provided with the distribution.
+  30:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **   3. Neither the name of Ac6 nor the names of its contributors
+  31:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **      may be used to endorse or promote products derived from this software
+  32:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **      without specific prior written permission.
+  33:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+  34:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  35:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  36:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  37:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  38:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  39:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  40:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  41:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  42:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  44:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **
+  45:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** *****************************************************************************
+  46:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** */
+  47:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  48:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** /* Includes */
+  49:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** #include <errno.h>
+  50:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** #include <stdio.h>
+  51:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  52:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** /* Variables */
+  53:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** //Uncomment following if needed - commented out for now as not used and causes warning
+  54:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** //extern int errno;
+  55:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** register char * stack_ptr asm("sp");
+  56:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  57:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** /* Functions */
+  58:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  59:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** /**
+  60:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c ****  _sbrk
+  61:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c ****  Increase program data space. Malloc and related functions depend on this
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** **/
+  63:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** char *_sbrk(int incr)
+  64:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** {
+  28              		.loc 1 64 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  65:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	extern char end asm("end");
+  32              		.loc 1 65 2 view .LVU1
+  66:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	static char *heap_end;
+  33              		.loc 1 66 2 view .LVU2
+  67:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	char *prev_heap_end;
+  34              		.loc 1 67 2 view .LVU3
+  68:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  69:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	if (heap_end == 0)
+  35              		.loc 1 69 2 view .LVU4
+  36              		.loc 1 69 15 is_stmt 0 view .LVU5
+  37 0000 0A4A     		ldr	r2, .L5
+  38              		.loc 1 69 5 view .LVU6
+  39 0002 1168     		ldr	r1, [r2]
+  64:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	extern char end asm("end");
+  40              		.loc 1 64 1 view .LVU7
+  41 0004 08B5     		push	{r3, lr}
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 8
+  44              		.cfi_offset 3, -8
+  45              		.cfi_offset 14, -4
+  64:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	extern char end asm("end");
+  46              		.loc 1 64 1 view .LVU8
+  47 0006 0346     		mov	r3, r0
+  48              		.loc 1 69 5 view .LVU9
+  49 0008 09B9     		cbnz	r1, .L2
+  70:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 		heap_end = &end;
+  50              		.loc 1 70 3 is_stmt 1 view .LVU10
+  51              		.loc 1 70 12 is_stmt 0 view .LVU11
+  52 000a 0949     		ldr	r1, .L5+4
+  53 000c 1160     		str	r1, [r2]
+  54              	.L2:
+  71:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  72:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	prev_heap_end = heap_end;
+  55              		.loc 1 72 2 is_stmt 1 view .LVU12
+  56              		.loc 1 72 16 is_stmt 0 view .LVU13
+  57 000e 1068     		ldr	r0, [r2]
+  58              	.LVL1:
+  73:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	if (heap_end + incr > stack_ptr)
+  59              		.loc 1 73 2 is_stmt 1 view .LVU14
+  60              		.loc 1 73 5 is_stmt 0 view .LVU15
+  61 0010 6946     		mov	r1, sp
+  62              		.loc 1 73 15 view .LVU16
+  63 0012 0344     		add	r3, r3, r0
+  64              	.LVL2:
+  65              		.loc 1 73 5 view .LVU17
+  66 0014 8B42     		cmp	r3, r1
+  67 0016 06D9     		bls	.L3
+  74:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	{
+  75:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 		errno = ENOMEM;
+  68              		.loc 1 75 3 is_stmt 1 view .LVU18
+  69 0018 FFF7FEFF 		bl	__errno
+  70              	.LVL3:
+  71              		.loc 1 75 9 is_stmt 0 view .LVU19
+  72 001c 0C23     		movs	r3, #12
+  73 001e 0360     		str	r3, [r0]
+  76:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 		return (char *) -1;
+  74              		.loc 1 76 3 is_stmt 1 view .LVU20
+  75              		.loc 1 76 10 is_stmt 0 view .LVU21
+  76 0020 4FF0FF30 		mov	r0, #-1
+  77              	.L1:
+  77:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	}
+  78:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  79:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	heap_end += incr;
+  80:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  81:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 	return (char *) prev_heap_end;
+  82:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** }
+  78              		.loc 1 82 1 view .LVU22
+  79 0024 08BD     		pop	{r3, pc}
+  80              	.LVL4:
+  81              	.L3:
+  79:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  82              		.loc 1 79 2 is_stmt 1 view .LVU23
+  79:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** 
+  83              		.loc 1 79 11 is_stmt 0 view .LVU24
+  84 0026 1360     		str	r3, [r2]
+  81:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** }
+  85              		.loc 1 81 2 is_stmt 1 view .LVU25
+  81:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_sysmem.c **** }
+  86              		.loc 1 81 9 is_stmt 0 view .LVU26
+  87 0028 FCE7     		b	.L1
+  88              	.L6:
+  89 002a 00BF     		.align	2
+  90              	.L5:
+  91 002c 00000000 		.word	.LANCHOR0
+  92 0030 00000000 		.word	end
+  93              		.cfi_endproc
+  94              	.LFE3:
+  96              		.bss
+  97              		.align	2
+  98              		.set	.LANCHOR0,. + 0
+ 101              	heap_end.0:
+ 102 0000 00000000 		.space	4
+ 103              		.text
+ 104              	.Letext0:
+ 105              		.file 2 "/usr/include/newlib/sys/errno.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f3_sysmem.c
+     /tmp/ccFNM6Fo.s:16     .text._sbrk:0000000000000000 $t
+     /tmp/ccFNM6Fo.s:24     .text._sbrk:0000000000000000 _sbrk
+     /tmp/ccFNM6Fo.s:91     .text._sbrk:000000000000002c $d
+     /tmp/ccFNM6Fo.s:97     .bss:0000000000000000 $d
+     /tmp/ccFNM6Fo.s:101    .bss:0000000000000000 heap_end.0
+
+UNDEFINED SYMBOLS
+__errno
+end

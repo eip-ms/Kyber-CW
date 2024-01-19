@@ -1,0 +1,1601 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"simpleserial.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.ss_crc,"ax",%progbits
+  16              		.align	1
+  17              		.global	ss_crc
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	ss_crc:
+  25              	.LVL0:
+  26              	.LFB0:
+  27              		.file 1 "/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c"
+   1:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** // simpleserial.c
+   2:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+   3:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #include "simpleserial.h"
+   4:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #include <stdint.h>
+   5:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #include "hal.h"
+   6:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+   7:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+   8:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #define MAX_SS_CMDS 16
+   9:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** static int num_commands = 0;
+  10:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  11:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #define MAX_SS_LEN 256
+  12:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  13:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** //#define SS_VER_1_0 0
+  14:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** //#define SS_VER_1_1 1
+  15:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** //#define SS_VER_2_0 2
+  16:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  17:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  18:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** // 0xA6 formerly 
+  19:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #define CW_CRC 0x4D 
+  20:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** uint8_t ss_crc(uint8_t *buf, uint8_t len)
+  21:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+  28              		.loc 1 21 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              		.loc 1 21 1 is_stmt 0 view .LVU1
+  34 0000 0346     		mov	r3, r0
+  22:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	unsigned int k = 0;
+  35              		.loc 1 22 2 is_stmt 1 view .LVU2
+  36              	.LVL1:
+  23:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t crc = 0x00;
+  37              		.loc 1 23 2 view .LVU3
+  24:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	while (len--) {
+  38              		.loc 1 24 2 view .LVU4
+  39 0002 0144     		add	r1, r1, r0
+  40              	.LVL2:
+  23:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t crc = 0x00;
+  41              		.loc 1 23 10 is_stmt 0 view .LVU5
+  42 0004 0020     		movs	r0, #0
+  43              	.LVL3:
+  44              	.L2:
+  45              		.loc 1 24 8 is_stmt 1 view .LVU6
+  46              		.loc 1 24 8 is_stmt 0 view .LVU7
+  47 0006 8B42     		cmp	r3, r1
+  48 0008 00D1     		bne	.L6
+  25:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		crc ^= *buf++;
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		for (k = 0; k < 8; k++) {
+  27:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			crc = crc & 0x80 ? (crc << 1) ^ CW_CRC: crc << 1;
+  28:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+  29:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+  30:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return crc;
+  49              		.loc 1 30 2 is_stmt 1 view .LVU8
+  31:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  32:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+  50              		.loc 1 32 1 is_stmt 0 view .LVU9
+  51 000a 7047     		bx	lr
+  52              	.L6:
+  25:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		crc ^= *buf++;
+  53              		.loc 1 25 3 is_stmt 1 view .LVU10
+  54              	.LVL4:
+  25:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		crc ^= *buf++;
+  55              		.loc 1 25 7 is_stmt 0 view .LVU11
+  56 000c 13F8012B 		ldrb	r2, [r3], #1	@ zero_extendqisi2
+  57              	.LVL5:
+  25:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		crc ^= *buf++;
+  58              		.loc 1 25 7 view .LVU12
+  59 0010 5040     		eors	r0, r0, r2
+  60              	.LVL6:
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			crc = crc & 0x80 ? (crc << 1) ^ CW_CRC: crc << 1;
+  61              		.loc 1 26 3 is_stmt 1 view .LVU13
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			crc = crc & 0x80 ? (crc << 1) ^ CW_CRC: crc << 1;
+  62              		.loc 1 26 15 view .LVU14
+  25:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		crc ^= *buf++;
+  63              		.loc 1 25 7 is_stmt 0 view .LVU15
+  64 0012 0822     		movs	r2, #8
+  65              	.LVL7:
+  66              	.L5:
+  27:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+  67              		.loc 1 27 4 is_stmt 1 view .LVU16
+  27:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+  68              		.loc 1 27 8 is_stmt 0 view .LVU17
+  69 0014 10F0800F 		tst	r0, #128
+  70 0018 4FEA4000 		lsl	r0, r0, #1
+  71              	.LVL8:
+  27:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+  72              		.loc 1 27 34 view .LVU18
+  73 001c 18BF     		it	ne
+  74 001e 80F04D00 		eorne	r0, r0, #77
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			crc = crc & 0x80 ? (crc << 1) ^ CW_CRC: crc << 1;
+  75              		.loc 1 26 3 view .LVU19
+  76 0022 013A     		subs	r2, r2, #1
+  77              	.LVL9:
+  27:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+  78              		.loc 1 27 8 view .LVU20
+  79 0024 C0B2     		uxtb	r0, r0
+  80              	.LVL10:
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			crc = crc & 0x80 ? (crc << 1) ^ CW_CRC: crc << 1;
+  81              		.loc 1 26 22 is_stmt 1 view .LVU21
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			crc = crc & 0x80 ? (crc << 1) ^ CW_CRC: crc << 1;
+  82              		.loc 1 26 15 view .LVU22
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			crc = crc & 0x80 ? (crc << 1) ^ CW_CRC: crc << 1;
+  83              		.loc 1 26 3 is_stmt 0 view .LVU23
+  84 0026 F5D1     		bne	.L5
+  85 0028 EDE7     		b	.L2
+  86              		.cfi_endproc
+  87              	.LFE0:
+  89              		.section	.text.hex_decode,"ax",%progbits
+  90              		.align	1
+  91              		.global	hex_decode
+  92              		.syntax unified
+  93              		.thumb
+  94              		.thumb_func
+  95              		.fpu softvfp
+  97              	hex_decode:
+  98              	.LVL11:
+  99              	.LFB1:
+  33:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  34:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** // [B_STUFF, CMD, SCMD, LEN, B_STUFF, DATA..., CRC, TERM]
+  35:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  36:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** //#define SS_VER SS_VER_2_0
+  37:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #if SS_VER == SS_VER_2_0
+  38:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #error "SS_VER_2_0 is deprecated! Use SS_VER_2_1 instead."
+  39:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #elif SS_VER == SS_VER_2_1
+  40:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  41:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** int hex_decode(int len, char* ascii_buf, uint8_t* data_buf)
+  42:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+ 100              		.loc 1 42 1 is_stmt 1 view -0
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 0
+ 103              		@ frame_needed = 0, uses_anonymous_args = 0
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for(int i = 0; i < len; i++)
+ 104              		.loc 1 43 2 view .LVU25
+ 105              	.LBB2:
+ 106              		.loc 1 43 6 view .LVU26
+ 107              		.loc 1 43 6 is_stmt 0 view .LVU27
+ 108              	.LBE2:
+  42:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for(int i = 0; i < len; i++)
+ 109              		.loc 1 42 1 view .LVU28
+ 110 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 111              	.LCFI0:
+ 112              		.cfi_def_cfa_offset 20
+ 113              		.cfi_offset 4, -20
+ 114              		.cfi_offset 5, -16
+ 115              		.cfi_offset 6, -12
+ 116              		.cfi_offset 7, -8
+ 117              		.cfi_offset 14, -4
+ 118              	.LBB7:
+ 119              		.loc 1 43 10 view .LVU29
+ 120 0002 0025     		movs	r5, #0
+ 121              	.LBB3:
+  44:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+  45:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		char n_hi = ascii_buf[2*i];
+  46:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		char n_lo = ascii_buf[2*i+1];
+ 122              		.loc 1 46 8 view .LVU30
+ 123 0004 4F1C     		adds	r7, r1, #1
+ 124              	.LVL12:
+ 125              	.L9:
+ 126              		.loc 1 46 8 view .LVU31
+ 127              	.LBE3:
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 128              		.loc 1 43 17 is_stmt 1 discriminator 1 view .LVU32
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 129              		.loc 1 43 2 is_stmt 0 discriminator 1 view .LVU33
+ 130 0006 8542     		cmp	r5, r0
+ 131 0008 01DB     		blt	.L19
+ 132              	.LBE7:
+  47:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  48:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if(n_lo >= '0' && n_lo <= '9')
+  49:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - '0';
+  50:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_lo >= 'A' && n_lo <= 'F')
+  51:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - 'A' + 10;
+  52:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_lo >= 'a' && n_lo <= 'f')
+  53:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - 'a' + 10;
+  54:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+  55:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			return 1;
+  56:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  57:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if(n_hi >= '0' && n_hi <= '9')
+  58:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - '0') << 4;
+  59:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_hi >= 'A' && n_hi <= 'F')
+  60:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - 'A' + 10) << 4;
+  61:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_hi >= 'a' && n_hi <= 'f')
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - 'a' + 10) << 4;
+  63:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+  64:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			return 1;
+  65:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+  66:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  67:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return 0;
+ 133              		.loc 1 67 9 view .LVU34
+ 134 000a 0020     		movs	r0, #0
+ 135              	.LVL13:
+ 136              		.loc 1 67 9 view .LVU35
+ 137 000c 21E0     		b	.L8
+ 138              	.LVL14:
+ 139              	.L19:
+ 140              	.LBB8:
+ 141              	.LBB4:
+  45:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		char n_lo = ascii_buf[2*i+1];
+ 142              		.loc 1 45 3 is_stmt 1 view .LVU36
+  46:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 143              		.loc 1 46 8 is_stmt 0 view .LVU37
+ 144 000e 17F81540 		ldrb	r4, [r7, r5, lsl #1]	@ zero_extendqisi2
+  45:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		char n_lo = ascii_buf[2*i+1];
+ 145              		.loc 1 45 8 view .LVU38
+ 146 0012 11F81530 		ldrb	r3, [r1, r5, lsl #1]	@ zero_extendqisi2
+ 147              	.LVL15:
+  46:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 148              		.loc 1 46 3 is_stmt 1 view .LVU39
+  48:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - '0';
+ 149              		.loc 1 48 3 view .LVU40
+  48:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - '0';
+ 150              		.loc 1 48 18 is_stmt 0 view .LVU41
+ 151 0016 A4F13006 		sub	r6, r4, #48
+ 152 001a F6B2     		uxtb	r6, r6
+  48:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - '0';
+ 153              		.loc 1 48 5 view .LVU42
+ 154 001c 092E     		cmp	r6, #9
+ 155 001e 0CD8     		bhi	.L10
+  49:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_lo >= 'A' && n_lo <= 'F')
+ 156              		.loc 1 49 4 is_stmt 1 view .LVU43
+  49:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_lo >= 'A' && n_lo <= 'F')
+ 157              		.loc 1 49 16 is_stmt 0 view .LVU44
+ 158 0020 1670     		strb	r6, [r2]
+ 159              	.LVL16:
+ 160              	.L11:
+  57:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - '0') << 4;
+ 161              		.loc 1 57 3 is_stmt 1 view .LVU45
+  57:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - '0') << 4;
+ 162              		.loc 1 57 18 is_stmt 0 view .LVU46
+ 163 0022 A3F13004 		sub	r4, r3, #48
+  57:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - '0') << 4;
+ 164              		.loc 1 57 5 view .LVU47
+ 165 0026 E6B2     		uxtb	r6, r4
+ 166 0028 092E     		cmp	r6, #9
+ 167 002a 15D8     		bhi	.L15
+ 168              	.L22:
+  60:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_hi >= 'a' && n_hi <= 'f')
+ 169              		.loc 1 60 16 view .LVU48
+ 170 002c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 171              	.LVL17:
+  60:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_hi >= 'a' && n_hi <= 'f')
+ 172              		.loc 1 60 16 view .LVU49
+ 173 002e 43EA0413 		orr	r3, r3, r4, lsl #4
+ 174              	.L21:
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 175              		.loc 1 62 16 view .LVU50
+ 176 0032 1370     		strb	r3, [r2]
+ 177              	.LBE4:
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 178              		.loc 1 43 26 is_stmt 1 view .LVU51
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 179              		.loc 1 43 27 is_stmt 0 view .LVU52
+ 180 0034 0135     		adds	r5, r5, #1
+ 181              	.LVL18:
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 182              		.loc 1 43 27 view .LVU53
+ 183 0036 0132     		adds	r2, r2, #1
+ 184 0038 E5E7     		b	.L9
+ 185              	.LVL19:
+ 186              	.L10:
+ 187              	.LBB5:
+  50:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - 'A' + 10;
+ 188              		.loc 1 50 8 is_stmt 1 view .LVU54
+  50:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - 'A' + 10;
+ 189              		.loc 1 50 10 is_stmt 0 view .LVU55
+ 190 003a A4F14106 		sub	r6, r4, #65
+ 191 003e 052E     		cmp	r6, #5
+ 192 0040 02D8     		bhi	.L12
+  51:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_lo >= 'a' && n_lo <= 'f')
+ 193              		.loc 1 51 4 is_stmt 1 view .LVU56
+  51:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_lo >= 'a' && n_lo <= 'f')
+ 194              		.loc 1 51 29 is_stmt 0 view .LVU57
+ 195 0042 373C     		subs	r4, r4, #55
+ 196              	.LVL20:
+ 197              	.L20:
+  53:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 198              		.loc 1 53 16 view .LVU58
+ 199 0044 1470     		strb	r4, [r2]
+ 200              	.LVL21:
+  53:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 201              		.loc 1 53 16 view .LVU59
+ 202 0046 ECE7     		b	.L11
+ 203              	.LVL22:
+ 204              	.L12:
+  52:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - 'a' + 10;
+ 205              		.loc 1 52 8 is_stmt 1 view .LVU60
+  52:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] = n_lo - 'a' + 10;
+ 206              		.loc 1 52 10 is_stmt 0 view .LVU61
+ 207 0048 A4F16106 		sub	r6, r4, #97
+ 208 004c 052E     		cmp	r6, #5
+ 209 004e 01D9     		bls	.L13
+ 210              	.LVL23:
+ 211              	.L18:
+  55:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 212              		.loc 1 55 11 view .LVU62
+ 213 0050 0120     		movs	r0, #1
+ 214              	.LVL24:
+ 215              	.L8:
+  55:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 216              		.loc 1 55 11 view .LVU63
+ 217              	.LBE5:
+ 218              	.LBE8:
+  68:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 219              		.loc 1 68 1 view .LVU64
+ 220 0052 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 221              	.LVL25:
+ 222              	.L13:
+ 223              	.LBB9:
+ 224              	.LBB6:
+  53:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 225              		.loc 1 53 4 is_stmt 1 view .LVU65
+  53:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 226              		.loc 1 53 29 is_stmt 0 view .LVU66
+ 227 0054 573C     		subs	r4, r4, #87
+ 228              	.LVL26:
+  53:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 229              		.loc 1 53 29 view .LVU67
+ 230 0056 F5E7     		b	.L20
+ 231              	.LVL27:
+ 232              	.L15:
+  59:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - 'A' + 10) << 4;
+ 233              		.loc 1 59 8 is_stmt 1 view .LVU68
+  59:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - 'A' + 10) << 4;
+ 234              		.loc 1 59 10 is_stmt 0 view .LVU69
+ 235 0058 A3F14104 		sub	r4, r3, #65
+ 236 005c 052C     		cmp	r4, #5
+ 237 005e 02D8     		bhi	.L17
+  60:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_hi >= 'a' && n_hi <= 'f')
+ 238              		.loc 1 60 4 is_stmt 1 view .LVU70
+  60:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else if(n_hi >= 'a' && n_hi <= 'f')
+ 239              		.loc 1 60 31 is_stmt 0 view .LVU71
+ 240 0060 A3F13704 		sub	r4, r3, #55
+ 241 0064 E2E7     		b	.L22
+ 242              	.L17:
+  61:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - 'a' + 10) << 4;
+ 243              		.loc 1 61 8 is_stmt 1 view .LVU72
+  61:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			data_buf[i] |= (n_hi - 'a' + 10) << 4;
+ 244              		.loc 1 61 10 is_stmt 0 view .LVU73
+ 245 0066 A3F16104 		sub	r4, r3, #97
+ 246 006a 052C     		cmp	r4, #5
+ 247 006c F0D8     		bhi	.L18
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 248              		.loc 1 62 4 is_stmt 1 view .LVU74
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 249              		.loc 1 62 16 is_stmt 0 view .LVU75
+ 250 006e 1478     		ldrb	r4, [r2]	@ zero_extendqisi2
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 251              		.loc 1 62 31 view .LVU76
+ 252 0070 573B     		subs	r3, r3, #87
+ 253              	.LVL28:
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 254              		.loc 1 62 16 view .LVU77
+ 255 0072 44EA0313 		orr	r3, r4, r3, lsl #4
+ 256              	.LVL29:
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		else
+ 257              		.loc 1 62 16 view .LVU78
+ 258 0076 DCE7     		b	.L21
+ 259              	.LBE6:
+ 260              	.LBE9:
+ 261              		.cfi_endproc
+ 262              	.LFE1:
+ 264              		.section	.text.ss_puts,"ax",%progbits
+ 265              		.align	1
+ 266              		.global	ss_puts
+ 267              		.syntax unified
+ 268              		.thumb
+ 269              		.thumb_func
+ 270              		.fpu softvfp
+ 272              	ss_puts:
+ 273              	.LVL30:
+ 274              	.LFB2:
+  69:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  70:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** typedef struct ss_cmd
+  71:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+  72:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	char c;
+  73:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	unsigned int len;
+  74:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t (*fp)(uint8_t, uint8_t, uint8_t, uint8_t *);
+  75:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** } ss_cmd;
+  76:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** static ss_cmd commands[MAX_SS_CMDS];
+  77:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  78:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** void ss_puts(char *x)
+  79:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+ 275              		.loc 1 79 1 is_stmt 1 view -0
+ 276              		.cfi_startproc
+ 277              		@ args = 0, pretend = 0, frame = 0
+ 278              		@ frame_needed = 0, uses_anonymous_args = 0
+ 279              		.loc 1 79 1 is_stmt 0 view .LVU80
+ 280 0000 10B5     		push	{r4, lr}
+ 281              	.LCFI1:
+ 282              		.cfi_def_cfa_offset 8
+ 283              		.cfi_offset 4, -8
+ 284              		.cfi_offset 14, -4
+ 285 0002 0446     		mov	r4, r0
+ 286              	.LVL31:
+ 287              	.L24:
+  80:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	do {
+ 288              		.loc 1 80 2 is_stmt 1 discriminator 1 view .LVU81
+  81:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		putch(*x);
+ 289              		.loc 1 81 3 discriminator 1 view .LVU82
+ 290 0004 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 291 0006 FFF7FEFF 		bl	putch
+ 292              	.LVL32:
+  82:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	} while (*++x);
+ 293              		.loc 1 82 10 discriminator 1 view .LVU83
+ 294              		.loc 1 82 2 is_stmt 0 discriminator 1 view .LVU84
+ 295 000a 14F8013F 		ldrb	r3, [r4, #1]!	@ zero_extendqisi2
+ 296              	.LVL33:
+ 297              		.loc 1 82 2 discriminator 1 view .LVU85
+ 298 000e 002B     		cmp	r3, #0
+ 299 0010 F8D1     		bne	.L24
+  83:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 300              		.loc 1 83 1 view .LVU86
+ 301 0012 10BD     		pop	{r4, pc}
+ 302              		.loc 1 83 1 view .LVU87
+ 303              		.cfi_endproc
+ 304              	.LFE2:
+ 306              		.section	.text.stuff_data,"ax",%progbits
+ 307              		.align	1
+ 308              		.global	stuff_data
+ 309              		.syntax unified
+ 310              		.thumb
+ 311              		.thumb_func
+ 312              		.fpu softvfp
+ 314              	stuff_data:
+ 315              	.LVL34:
+ 316              	.LFB5:
+  84:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  85:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** #define FRAME_BYTE 0x00
+  86:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  87:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** uint8_t check_version(uint8_t cmd, uint8_t scmd, uint8_t len, uint8_t *data)
+  88:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+  89:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t ver = SS_VER;
+  90:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	simpleserial_put('r', 1, &ver);
+  91:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return SS_ERR_OK;
+  92:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+  93:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+  94:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** uint8_t ss_get_commands(uint8_t cmd, uint8_t scmd, uint8_t len, uint8_t *data)
+  95:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+  96:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     uint8_t cmd_chars[MAX_SS_CMDS];
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     for (uint8_t i = 0; i < (num_commands & 0xFF); i++) {
+  98:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+  99:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     }
+ 100:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 101:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     simpleserial_put('r', num_commands & 0xFF, (void *)cmd_chars);
+ 102:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     return 0x00;
+ 103:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 104:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 105:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 106:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** uint8_t stuff_data(uint8_t *buf, uint8_t len)
+ 107:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+ 317              		.loc 1 107 1 is_stmt 1 view -0
+ 318              		.cfi_startproc
+ 319              		@ args = 0, pretend = 0, frame = 0
+ 320              		@ frame_needed = 0, uses_anonymous_args = 0
+ 108:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t i = 1;
+ 321              		.loc 1 108 2 view .LVU89
+ 109:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t last = 0;
+ 322              		.loc 1 109 2 view .LVU90
+ 110:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (; i < len; i++) {
+ 323              		.loc 1 110 2 view .LVU91
+ 107:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t i = 1;
+ 324              		.loc 1 107 1 is_stmt 0 view .LVU92
+ 325 0000 30B5     		push	{r4, r5, lr}
+ 326              	.LCFI2:
+ 327              		.cfi_def_cfa_offset 12
+ 328              		.cfi_offset 4, -12
+ 329              		.cfi_offset 5, -8
+ 330              		.cfi_offset 14, -4
+ 109:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t last = 0;
+ 331              		.loc 1 109 10 view .LVU93
+ 332 0002 0022     		movs	r2, #0
+ 333 0004 0446     		mov	r4, r0
+ 108:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t last = 0;
+ 334              		.loc 1 108 10 view .LVU94
+ 335 0006 0123     		movs	r3, #1
+ 336              	.LVL35:
+ 337              	.L27:
+ 338              		.loc 1 110 9 is_stmt 1 discriminator 1 view .LVU95
+ 339              		.loc 1 110 2 is_stmt 0 discriminator 1 view .LVU96
+ 340 0008 8B42     		cmp	r3, r1
+ 341 000a 01D3     		bcc	.L29
+ 111:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (buf[i] == FRAME_BYTE) {
+ 112:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			buf[last] = i - last;
+ 113:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			last = i;
+ 114:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+ 115:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 116:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return 0x00;
+ 342              		.loc 1 116 2 is_stmt 1 view .LVU97
+ 117:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 343              		.loc 1 117 1 is_stmt 0 view .LVU98
+ 344 000c 0020     		movs	r0, #0
+ 345              	.LVL36:
+ 346              		.loc 1 117 1 view .LVU99
+ 347 000e 30BD     		pop	{r4, r5, pc}
+ 348              	.LVL37:
+ 349              	.L29:
+ 111:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (buf[i] == FRAME_BYTE) {
+ 350              		.loc 1 111 3 is_stmt 1 view .LVU100
+ 111:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (buf[i] == FRAME_BYTE) {
+ 351              		.loc 1 111 6 is_stmt 0 view .LVU101
+ 352 0010 14F8015F 		ldrb	r5, [r4, #1]!	@ zero_extendqisi2
+ 353 0014 15B9     		cbnz	r5, .L28
+ 112:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			last = i;
+ 354              		.loc 1 112 4 is_stmt 1 view .LVU102
+ 112:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			last = i;
+ 355              		.loc 1 112 18 is_stmt 0 view .LVU103
+ 356 0016 9D1A     		subs	r5, r3, r2
+ 112:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			last = i;
+ 357              		.loc 1 112 14 view .LVU104
+ 358 0018 8554     		strb	r5, [r0, r2]
+ 113:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+ 359              		.loc 1 113 4 is_stmt 1 view .LVU105
+ 360              	.LVL38:
+ 112:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			last = i;
+ 361              		.loc 1 112 14 is_stmt 0 view .LVU106
+ 362 001a 1A46     		mov	r2, r3
+ 363              	.LVL39:
+ 364              	.L28:
+ 110:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (buf[i] == FRAME_BYTE) {
+ 365              		.loc 1 110 18 is_stmt 1 view .LVU107
+ 110:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (buf[i] == FRAME_BYTE) {
+ 366              		.loc 1 110 19 is_stmt 0 view .LVU108
+ 367 001c 0133     		adds	r3, r3, #1
+ 368              	.LVL40:
+ 110:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (buf[i] == FRAME_BYTE) {
+ 369              		.loc 1 110 19 view .LVU109
+ 370 001e DBB2     		uxtb	r3, r3
+ 371              	.LVL41:
+ 110:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (buf[i] == FRAME_BYTE) {
+ 372              		.loc 1 110 19 view .LVU110
+ 373 0020 F2E7     		b	.L27
+ 374              		.cfi_endproc
+ 375              	.LFE5:
+ 377              		.section	.text.unstuff_data,"ax",%progbits
+ 378              		.align	1
+ 379              		.global	unstuff_data
+ 380              		.syntax unified
+ 381              		.thumb
+ 382              		.thumb_func
+ 383              		.fpu softvfp
+ 385              	unstuff_data:
+ 386              	.LVL42:
+ 387              	.LFB6:
+ 118:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 119:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** uint8_t unstuff_data(uint8_t *buf, uint8_t len)
+ 120:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+ 388              		.loc 1 120 1 is_stmt 1 view -0
+ 389              		.cfi_startproc
+ 390              		@ args = 0, pretend = 0, frame = 0
+ 391              		@ frame_needed = 0, uses_anonymous_args = 0
+ 121:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t next = buf[0];
+ 392              		.loc 1 121 2 view .LVU112
+ 120:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t next = buf[0];
+ 393              		.loc 1 120 1 is_stmt 0 view .LVU113
+ 394 0000 10B5     		push	{r4, lr}
+ 395              	.LCFI3:
+ 396              		.cfi_def_cfa_offset 8
+ 397              		.cfi_offset 4, -8
+ 398              		.cfi_offset 14, -4
+ 399              		.loc 1 121 10 view .LVU114
+ 400 0002 0278     		ldrb	r2, [r0]	@ zero_extendqisi2
+ 401              	.LVL43:
+ 122:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	buf[0] = 0x00;
+ 402              		.loc 1 122 2 is_stmt 1 view .LVU115
+ 403              		.loc 1 122 9 is_stmt 0 view .LVU116
+ 404 0004 0024     		movs	r4, #0
+ 120:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t next = buf[0];
+ 405              		.loc 1 120 1 view .LVU117
+ 406 0006 0346     		mov	r3, r0
+ 407              		.loc 1 122 9 view .LVU118
+ 408 0008 0470     		strb	r4, [r0]
+ 123:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	//len -= 1;
+ 124:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t tmp = next;
+ 409              		.loc 1 124 2 is_stmt 1 view .LVU119
+ 410              	.LVL44:
+ 125:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	while ((next < len) && tmp != 0) {
+ 411              		.loc 1 125 2 view .LVU120
+ 121:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	buf[0] = 0x00;
+ 412              		.loc 1 121 10 is_stmt 0 view .LVU121
+ 413 000a 1046     		mov	r0, r2
+ 414              	.LVL45:
+ 415              	.L31:
+ 416              		.loc 1 125 8 is_stmt 1 view .LVU122
+ 417 000c 8842     		cmp	r0, r1
+ 418 000e 00D2     		bcs	.L35
+ 419              		.loc 1 125 22 is_stmt 0 discriminator 1 view .LVU123
+ 420 0010 02B9     		cbnz	r2, .L33
+ 421              	.L35:
+ 126:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		tmp = buf[next];
+ 127:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		buf[next] = FRAME_BYTE;
+ 128:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		next += tmp;
+ 129:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 130:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return next;
+ 131:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 422              		.loc 1 131 1 view .LVU124
+ 423 0012 10BD     		pop	{r4, pc}
+ 424              	.L33:
+ 126:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		tmp = buf[next];
+ 425              		.loc 1 126 3 is_stmt 1 view .LVU125
+ 126:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		tmp = buf[next];
+ 426              		.loc 1 126 7 is_stmt 0 view .LVU126
+ 427 0014 1A5C     		ldrb	r2, [r3, r0]	@ zero_extendqisi2
+ 428              	.LVL46:
+ 127:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		next += tmp;
+ 429              		.loc 1 127 3 is_stmt 1 view .LVU127
+ 127:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		next += tmp;
+ 430              		.loc 1 127 13 is_stmt 0 view .LVU128
+ 431 0016 1C54     		strb	r4, [r3, r0]
+ 128:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 432              		.loc 1 128 3 is_stmt 1 view .LVU129
+ 128:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 433              		.loc 1 128 8 is_stmt 0 view .LVU130
+ 434 0018 1044     		add	r0, r0, r2
+ 435              	.LVL47:
+ 128:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 436              		.loc 1 128 8 view .LVU131
+ 437 001a C0B2     		uxtb	r0, r0
+ 438              	.LVL48:
+ 128:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 439              		.loc 1 128 8 view .LVU132
+ 440 001c F6E7     		b	.L31
+ 441              		.cfi_endproc
+ 442              	.LFE6:
+ 444              		.section	.text.simpleserial_addcmd,"ax",%progbits
+ 445              		.align	1
+ 446              		.global	simpleserial_addcmd
+ 447              		.syntax unified
+ 448              		.thumb
+ 449              		.thumb_func
+ 450              		.fpu softvfp
+ 452              	simpleserial_addcmd:
+ 453              	.LVL49:
+ 454              	.LFB8:
+ 132:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 133:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** // Set up the SimpleSerial module by preparing internal commands
+ 134:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** // This just adds the "v" command for now...
+ 135:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** void simpleserial_init()
+ 136:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+ 137:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	simpleserial_addcmd('v', 0, check_version);
+ 138:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     simpleserial_addcmd('w', 0, ss_get_commands);
+ 139:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 140:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 141:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** int simpleserial_addcmd(char c, unsigned int len, uint8_t (*fp)(uint8_t, uint8_t, uint8_t, uint8_t*
+ 142:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+ 455              		.loc 1 142 1 is_stmt 1 view -0
+ 456              		.cfi_startproc
+ 457              		@ args = 0, pretend = 0, frame = 0
+ 458              		@ frame_needed = 0, uses_anonymous_args = 0
+ 143:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if(num_commands >= MAX_SS_CMDS) {
+ 459              		.loc 1 143 2 view .LVU134
+ 142:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if(num_commands >= MAX_SS_CMDS) {
+ 460              		.loc 1 142 1 is_stmt 0 view .LVU135
+ 461 0000 38B5     		push	{r3, r4, r5, lr}
+ 462              	.LCFI4:
+ 463              		.cfi_def_cfa_offset 16
+ 464              		.cfi_offset 3, -16
+ 465              		.cfi_offset 4, -12
+ 466              		.cfi_offset 5, -8
+ 467              		.cfi_offset 14, -4
+ 468              		.loc 1 143 18 view .LVU136
+ 469 0002 0B4D     		ldr	r5, .L41
+ 470 0004 2B68     		ldr	r3, [r5]
+ 471              		.loc 1 143 4 view .LVU137
+ 472 0006 0F2B     		cmp	r3, #15
+ 473 0008 04DD     		ble	.L37
+ 144:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		putch('a');
+ 474              		.loc 1 144 3 is_stmt 1 view .LVU138
+ 475 000a 6120     		movs	r0, #97
+ 476              	.LVL50:
+ 477              	.L40:
+ 145:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		return 1;
+ 146:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 147:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 148:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if(len >= MAX_SS_LEN) {
+ 149:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		putch('b');
+ 478              		.loc 1 149 3 is_stmt 0 view .LVU139
+ 479 000c FFF7FEFF 		bl	putch
+ 480              	.LVL51:
+ 150:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		return 1;
+ 481              		.loc 1 150 3 is_stmt 1 view .LVU140
+ 482              		.loc 1 150 10 is_stmt 0 view .LVU141
+ 483 0010 0120     		movs	r0, #1
+ 484              	.L36:
+ 151:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 152:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 153:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	commands[num_commands].c   = c;
+ 154:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	commands[num_commands].len = len;
+ 155:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	commands[num_commands].fp  = fp;
+ 156:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	num_commands++;
+ 157:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 158:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return 0;
+ 159:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 485              		.loc 1 159 1 view .LVU142
+ 486 0012 38BD     		pop	{r3, r4, r5, pc}
+ 487              	.LVL52:
+ 488              	.L37:
+ 148:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		putch('b');
+ 489              		.loc 1 148 2 is_stmt 1 view .LVU143
+ 148:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		putch('b');
+ 490              		.loc 1 148 4 is_stmt 0 view .LVU144
+ 491 0014 FF29     		cmp	r1, #255
+ 492 0016 01D9     		bls	.L39
+ 149:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		return 1;
+ 493              		.loc 1 149 3 is_stmt 1 view .LVU145
+ 494 0018 6220     		movs	r0, #98
+ 495              	.LVL53:
+ 149:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		return 1;
+ 496              		.loc 1 149 3 is_stmt 0 view .LVU146
+ 497 001a F7E7     		b	.L40
+ 498              	.LVL54:
+ 499              	.L39:
+ 153:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	commands[num_commands].len = len;
+ 500              		.loc 1 153 2 is_stmt 1 view .LVU147
+ 153:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	commands[num_commands].len = len;
+ 501              		.loc 1 153 29 is_stmt 0 view .LVU148
+ 502 001c 0C24     		movs	r4, #12
+ 503 001e 04FB0354 		mla	r4, r4, r3, r5
+ 156:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 504              		.loc 1 156 14 view .LVU149
+ 505 0022 0133     		adds	r3, r3, #1
+ 153:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	commands[num_commands].len = len;
+ 506              		.loc 1 153 29 view .LVU150
+ 507 0024 2071     		strb	r0, [r4, #4]
+ 154:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	commands[num_commands].fp  = fp;
+ 508              		.loc 1 154 2 is_stmt 1 view .LVU151
+ 155:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	num_commands++;
+ 509              		.loc 1 155 29 is_stmt 0 view .LVU152
+ 510 0026 C4E90212 		strd	r1, r2, [r4, #8]
+ 156:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 511              		.loc 1 156 2 is_stmt 1 view .LVU153
+ 156:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 512              		.loc 1 156 14 is_stmt 0 view .LVU154
+ 513 002a 2B60     		str	r3, [r5]
+ 158:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 514              		.loc 1 158 2 is_stmt 1 view .LVU155
+ 158:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 515              		.loc 1 158 9 is_stmt 0 view .LVU156
+ 516 002c 0020     		movs	r0, #0
+ 517              	.LVL55:
+ 158:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 518              		.loc 1 158 9 view .LVU157
+ 519 002e F0E7     		b	.L36
+ 520              	.L42:
+ 521              		.align	2
+ 522              	.L41:
+ 523 0030 00000000 		.word	.LANCHOR0
+ 524              		.cfi_endproc
+ 525              	.LFE8:
+ 527              		.section	.text.simpleserial_init,"ax",%progbits
+ 528              		.align	1
+ 529              		.global	simpleserial_init
+ 530              		.syntax unified
+ 531              		.thumb
+ 532              		.thumb_func
+ 533              		.fpu softvfp
+ 535              	simpleserial_init:
+ 536              	.LFB7:
+ 136:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	simpleserial_addcmd('v', 0, check_version);
+ 537              		.loc 1 136 1 is_stmt 1 view -0
+ 538              		.cfi_startproc
+ 539              		@ args = 0, pretend = 0, frame = 0
+ 540              		@ frame_needed = 0, uses_anonymous_args = 0
+ 137:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     simpleserial_addcmd('w', 0, ss_get_commands);
+ 541              		.loc 1 137 2 view .LVU159
+ 136:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	simpleserial_addcmd('v', 0, check_version);
+ 542              		.loc 1 136 1 is_stmt 0 view .LVU160
+ 543 0000 08B5     		push	{r3, lr}
+ 544              	.LCFI5:
+ 545              		.cfi_def_cfa_offset 8
+ 546              		.cfi_offset 3, -8
+ 547              		.cfi_offset 14, -4
+ 137:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     simpleserial_addcmd('w', 0, ss_get_commands);
+ 548              		.loc 1 137 2 view .LVU161
+ 549 0002 064A     		ldr	r2, .L44
+ 550 0004 0021     		movs	r1, #0
+ 551 0006 7620     		movs	r0, #118
+ 552 0008 FFF7FEFF 		bl	simpleserial_addcmd
+ 553              	.LVL56:
+ 138:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 554              		.loc 1 138 5 is_stmt 1 view .LVU162
+ 139:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 555              		.loc 1 139 1 is_stmt 0 view .LVU163
+ 556 000c BDE80840 		pop	{r3, lr}
+ 557              	.LCFI6:
+ 558              		.cfi_restore 14
+ 559              		.cfi_restore 3
+ 560              		.cfi_def_cfa_offset 0
+ 138:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 561              		.loc 1 138 5 view .LVU164
+ 562 0010 034A     		ldr	r2, .L44+4
+ 563 0012 0021     		movs	r1, #0
+ 564 0014 7720     		movs	r0, #119
+ 565 0016 FFF7FEBF 		b	simpleserial_addcmd
+ 566              	.LVL57:
+ 567              	.L45:
+ 568 001a 00BF     		.align	2
+ 569              	.L44:
+ 570 001c 00000000 		.word	check_version
+ 571 0020 00000000 		.word	ss_get_commands
+ 572              		.cfi_endproc
+ 573              	.LFE7:
+ 575              		.section	.text.simpleserial_put,"ax",%progbits
+ 576              		.align	1
+ 577              		.global	simpleserial_put
+ 578              		.syntax unified
+ 579              		.thumb
+ 580              		.thumb_func
+ 581              		.fpu softvfp
+ 583              	simpleserial_put:
+ 584              	.LVL58:
+ 585              	.LFB10:
+ 160:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 161:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** void simpleserial_get(void)
+ 162:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+ 163:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t data_buf[MAX_SS_LEN];
+ 164:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t err = 0;
+ 165:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 166:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (int i = 0; i < 4; i++) {
+ 167:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch(); //PTR, cmd, scmd, len
+ 168:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (data_buf[i] == FRAME_BYTE) {
+ 169:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			err = SS_ERR_FRAME_BYTE;
+ 170:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			goto ERROR;
+ 171:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+ 172:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 173:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t next_frame = unstuff_data(data_buf, 4);
+ 174:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 175:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	// check for valid command
+ 176:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t c = 0;
+ 177:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for(c = 0; c < num_commands; c++)
+ 178:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 179:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if(commands[c].c == data_buf[1])
+ 180:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			break;
+ 181:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 182:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 183:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if (c == num_commands) {
+ 184:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_CMD;
+ 185:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 186:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 187:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 188:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	//check that next frame not beyond end of message
+ 189:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	// account for cmd, scmd, len, data, crc, end of frame
+ 190:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if ((data_buf[3] + 5) < next_frame) {
+ 191:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_LEN;
+ 192:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 193:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 194:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 195:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	// read in data
+ 196:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	// eq to len + crc + frame end
+ 197:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	int i = 4;
+ 198:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (; i < data_buf[3] + 5; i++) {
+ 199:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch();
+ 200:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (data_buf[i] == FRAME_BYTE) {
+ 201:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			err = SS_ERR_FRAME_BYTE;
+ 202:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			goto ERROR;
+ 203:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		}
+ 204:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 205:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 206:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	//check that final byte is the FRAME_BYTE
+ 207:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[i] = getch();
+ 208:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if (data_buf[i] != FRAME_BYTE) {
+ 209:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_LEN;
+ 210:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 211:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 212:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 213:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	//fully unstuff data now
+ 214:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	unstuff_data(data_buf + next_frame, i - next_frame + 1);
+ 215:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 216:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	//calc crc excluding original frame offset and frame end and crc
+ 217:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t crc = ss_crc(data_buf+1, i-2);
+ 218:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if (crc != data_buf[i-1]) {
+ 219:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_CRC;
+ 220:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 221:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 222:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 223:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	err = commands[c].fp(data_buf[1], data_buf[2], data_buf[3], data_buf+4);
+ 224:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 225:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** ERROR:
+ 226:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	simpleserial_put('e', 0x01, &err);
+ 227:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return;
+ 228:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 229:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 230:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** void simpleserial_put(char c, uint8_t size, uint8_t* output)
+ 231:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** {
+ 586              		.loc 1 231 1 is_stmt 1 view -0
+ 587              		.cfi_startproc
+ 588              		@ args = 0, pretend = 0, frame = 256
+ 589              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t data_buf[MAX_SS_LEN];
+ 590              		.loc 1 232 2 view .LVU166
+ 233:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[0] = 0x00;
+ 591              		.loc 1 233 2 view .LVU167
+ 231:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t data_buf[MAX_SS_LEN];
+ 592              		.loc 1 231 1 is_stmt 0 view .LVU168
+ 593 0000 70B5     		push	{r4, r5, r6, lr}
+ 594              	.LCFI7:
+ 595              		.cfi_def_cfa_offset 16
+ 596              		.cfi_offset 4, -16
+ 597              		.cfi_offset 5, -12
+ 598              		.cfi_offset 6, -8
+ 599              		.cfi_offset 14, -4
+ 600 0002 C0B0     		sub	sp, sp, #256
+ 601              	.LCFI8:
+ 602              		.cfi_def_cfa_offset 272
+ 231:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t data_buf[MAX_SS_LEN];
+ 603              		.loc 1 231 1 view .LVU169
+ 604 0004 0C46     		mov	r4, r1
+ 605              		.loc 1 233 14 view .LVU170
+ 606 0006 0025     		movs	r5, #0
+ 231:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t data_buf[MAX_SS_LEN];
+ 607              		.loc 1 231 1 view .LVU171
+ 608 0008 1146     		mov	r1, r2
+ 609              	.LVL59:
+ 234:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[1] = c;
+ 610              		.loc 1 234 14 view .LVU172
+ 611 000a 8DF80100 		strb	r0, [sp, #1]
+ 235:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[2] = size;
+ 236:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	int i = 0;
+ 237:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (; i < size; i++) {
+ 238:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i + 3] = output[i];
+ 612              		.loc 1 238 19 view .LVU173
+ 613 000e 2246     		mov	r2, r4
+ 614              	.LVL60:
+ 615              		.loc 1 238 19 view .LVU174
+ 616 0010 0DF10300 		add	r0, sp, #3
+ 617              	.LVL61:
+ 235:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[2] = size;
+ 618              		.loc 1 235 14 view .LVU175
+ 619 0014 8DF80240 		strb	r4, [sp, #2]
+ 233:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[1] = c;
+ 620              		.loc 1 233 14 view .LVU176
+ 621 0018 8DF80050 		strb	r5, [sp]
+ 234:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[1] = c;
+ 622              		.loc 1 234 2 is_stmt 1 view .LVU177
+ 235:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[2] = size;
+ 623              		.loc 1 235 2 view .LVU178
+ 236:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (; i < size; i++) {
+ 624              		.loc 1 236 2 view .LVU179
+ 625              	.LVL62:
+ 237:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i + 3] = output[i];
+ 626              		.loc 1 237 2 view .LVU180
+ 627              		.loc 1 238 19 is_stmt 0 view .LVU181
+ 628 001c FFF7FEFF 		bl	memcpy
+ 629              	.LVL63:
+ 239:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 240:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[i + 3] = ss_crc(data_buf+1, size+2);
+ 630              		.loc 1 240 2 is_stmt 1 view .LVU182
+ 631              		.loc 1 240 20 is_stmt 0 view .LVU183
+ 632 0020 A11C     		adds	r1, r4, #2
+ 633 0022 C9B2     		uxtb	r1, r1
+ 634 0024 0DF10100 		add	r0, sp, #1
+ 635 0028 FFF7FEFF 		bl	ss_crc
+ 636              	.LVL64:
+ 637              		.loc 1 240 18 view .LVU184
+ 638 002c 0DEB0403 		add	r3, sp, r4
+ 241:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[i + 4] = 0x00;
+ 639              		.loc 1 241 13 view .LVU185
+ 640 0030 261D     		adds	r6, r4, #4
+ 242:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	stuff_data(data_buf, i + 5);
+ 641              		.loc 1 242 2 view .LVU186
+ 642 0032 611D     		adds	r1, r4, #5
+ 240:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[i + 4] = 0x00;
+ 643              		.loc 1 240 18 view .LVU187
+ 644 0034 D870     		strb	r0, [r3, #3]
+ 241:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[i + 4] = 0x00;
+ 645              		.loc 1 241 2 is_stmt 1 view .LVU188
+ 646              		.loc 1 242 2 is_stmt 0 view .LVU189
+ 647 0036 C9B2     		uxtb	r1, r1
+ 648 0038 6846     		mov	r0, sp
+ 241:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	data_buf[i + 4] = 0x00;
+ 649              		.loc 1 241 18 view .LVU190
+ 650 003a 0DF80650 		strb	r5, [sp, r6]
+ 651              		.loc 1 242 2 is_stmt 1 view .LVU191
+ 652 003e FFF7FEFF 		bl	stuff_data
+ 653              	.LVL65:
+ 243:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (int i = 0; i < size + 5; i++) {
+ 654              		.loc 1 243 2 view .LVU192
+ 655              	.LBB10:
+ 656              		.loc 1 243 7 view .LVU193
+ 657              		.loc 1 243 18 view .LVU194
+ 658 0042 6C46     		mov	r4, sp
+ 659              	.LVL66:
+ 660              	.L47:
+ 244:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		putch(data_buf[i]);
+ 661              		.loc 1 244 3 discriminator 3 view .LVU195
+ 662 0044 14F8010B 		ldrb	r0, [r4], #1	@ zero_extendqisi2
+ 243:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (int i = 0; i < size + 5; i++) {
+ 663              		.loc 1 243 33 is_stmt 0 discriminator 3 view .LVU196
+ 664 0048 0135     		adds	r5, r5, #1
+ 665              	.LVL67:
+ 666              		.loc 1 244 3 discriminator 3 view .LVU197
+ 667 004a FFF7FEFF 		bl	putch
+ 668              	.LVL68:
+ 243:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (int i = 0; i < size + 5; i++) {
+ 669              		.loc 1 243 32 is_stmt 1 discriminator 3 view .LVU198
+ 243:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (int i = 0; i < size + 5; i++) {
+ 670              		.loc 1 243 18 discriminator 3 view .LVU199
+ 243:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for (int i = 0; i < size + 5; i++) {
+ 671              		.loc 1 243 2 is_stmt 0 discriminator 3 view .LVU200
+ 672 004e AE42     		cmp	r6, r5
+ 673 0050 F8DA     		bge	.L47
+ 674              	.LBE10:
+ 245:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 246:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 675              		.loc 1 246 1 view .LVU201
+ 676 0052 40B0     		add	sp, sp, #256
+ 677              	.LCFI9:
+ 678              		.cfi_def_cfa_offset 16
+ 679              		@ sp needed
+ 680 0054 70BD     		pop	{r4, r5, r6, pc}
+ 681              		.loc 1 246 1 view .LVU202
+ 682              		.cfi_endproc
+ 683              	.LFE10:
+ 685              		.section	.text.check_version,"ax",%progbits
+ 686              		.align	1
+ 687              		.global	check_version
+ 688              		.syntax unified
+ 689              		.thumb
+ 690              		.thumb_func
+ 691              		.fpu softvfp
+ 693              	check_version:
+ 694              	.LVL69:
+ 695              	.LFB3:
+  88:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t ver = SS_VER;
+ 696              		.loc 1 88 1 is_stmt 1 view -0
+ 697              		.cfi_startproc
+ 698              		@ args = 0, pretend = 0, frame = 8
+ 699              		@ frame_needed = 0, uses_anonymous_args = 0
+  89:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	simpleserial_put('r', 1, &ver);
+ 700              		.loc 1 89 2 view .LVU204
+  88:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t ver = SS_VER;
+ 701              		.loc 1 88 1 is_stmt 0 view .LVU205
+ 702 0000 07B5     		push	{r0, r1, r2, lr}
+ 703              	.LCFI10:
+ 704              		.cfi_def_cfa_offset 16
+ 705              		.cfi_offset 14, -4
+  89:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	simpleserial_put('r', 1, &ver);
+ 706              		.loc 1 89 10 view .LVU206
+ 707 0002 0323     		movs	r3, #3
+ 708              	.LVL70:
+  90:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return SS_ERR_OK;
+ 709              		.loc 1 90 2 view .LVU207
+ 710 0004 0DF10702 		add	r2, sp, #7
+ 711              	.LVL71:
+  90:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return SS_ERR_OK;
+ 712              		.loc 1 90 2 view .LVU208
+ 713 0008 0121     		movs	r1, #1
+ 714              	.LVL72:
+  90:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return SS_ERR_OK;
+ 715              		.loc 1 90 2 view .LVU209
+ 716 000a 7220     		movs	r0, #114
+ 717              	.LVL73:
+  89:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	simpleserial_put('r', 1, &ver);
+ 718              		.loc 1 89 10 view .LVU210
+ 719 000c 8DF80730 		strb	r3, [sp, #7]
+  90:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return SS_ERR_OK;
+ 720              		.loc 1 90 2 is_stmt 1 view .LVU211
+ 721 0010 FFF7FEFF 		bl	simpleserial_put
+ 722              	.LVL74:
+  91:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 723              		.loc 1 91 2 view .LVU212
+  92:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 724              		.loc 1 92 1 is_stmt 0 view .LVU213
+ 725 0014 0020     		movs	r0, #0
+ 726 0016 03B0     		add	sp, sp, #12
+ 727              	.LCFI11:
+ 728              		.cfi_def_cfa_offset 4
+ 729              		@ sp needed
+ 730 0018 5DF804FB 		ldr	pc, [sp], #4
+ 731              		.cfi_endproc
+ 732              	.LFE3:
+ 734              		.section	.text.ss_get_commands,"ax",%progbits
+ 735              		.align	1
+ 736              		.global	ss_get_commands
+ 737              		.syntax unified
+ 738              		.thumb
+ 739              		.thumb_func
+ 740              		.fpu softvfp
+ 742              	ss_get_commands:
+ 743              	.LVL75:
+ 744              	.LFB4:
+  95:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     uint8_t cmd_chars[MAX_SS_CMDS];
+ 745              		.loc 1 95 1 is_stmt 1 view -0
+ 746              		.cfi_startproc
+ 747              		@ args = 0, pretend = 0, frame = 16
+ 748              		@ frame_needed = 0, uses_anonymous_args = 0
+  96:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     for (uint8_t i = 0; i < (num_commands & 0xFF); i++) {
+ 749              		.loc 1 96 5 view .LVU215
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 750              		.loc 1 97 5 view .LVU216
+ 751              	.LBB11:
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 752              		.loc 1 97 10 view .LVU217
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 753              		.loc 1 97 10 is_stmt 0 view .LVU218
+ 754              	.LBE11:
+  95:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     uint8_t cmd_chars[MAX_SS_CMDS];
+ 755              		.loc 1 95 1 view .LVU219
+ 756 0000 30B5     		push	{r4, r5, lr}
+ 757              	.LCFI12:
+ 758              		.cfi_def_cfa_offset 12
+ 759              		.cfi_offset 4, -12
+ 760              		.cfi_offset 5, -8
+ 761              		.cfi_offset 14, -4
+ 762              	.LBB12:
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 763              		.loc 1 97 43 view .LVU220
+ 764 0002 0D48     		ldr	r0, .L53
+ 765              	.LVL76:
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 766              		.loc 1 97 43 view .LVU221
+ 767 0004 0178     		ldrb	r1, [r0]	@ zero_extendqisi2
+ 768              	.LVL77:
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 769              		.loc 1 97 43 view .LVU222
+ 770              	.LBE12:
+  95:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     uint8_t cmd_chars[MAX_SS_CMDS];
+ 771              		.loc 1 95 1 view .LVU223
+ 772 0006 85B0     		sub	sp, sp, #20
+ 773              	.LCFI13:
+ 774              		.cfi_def_cfa_offset 32
+ 775              	.LBB13:
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 776              		.loc 1 97 5 view .LVU224
+ 777 0008 0022     		movs	r2, #0
+ 778              	.LVL78:
+  98:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     }
+ 779              		.loc 1 98 35 view .LVU225
+ 780 000a 0C24     		movs	r4, #12
+ 781              	.LVL79:
+ 782              	.L51:
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 783              		.loc 1 97 25 is_stmt 1 discriminator 1 view .LVU226
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 784              		.loc 1 97 27 is_stmt 0 discriminator 1 view .LVU227
+ 785 000c D3B2     		uxtb	r3, r2
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 786              		.loc 1 97 5 discriminator 1 view .LVU228
+ 787 000e 8B42     		cmp	r3, r1
+ 788 0010 02F10102 		add	r2, r2, #1
+ 789              	.LVL80:
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 790              		.loc 1 97 5 discriminator 1 view .LVU229
+ 791 0014 06DB     		blt	.L52
+ 792              	.LBE13:
+ 101:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     return 0x00;
+ 793              		.loc 1 101 5 is_stmt 1 view .LVU230
+ 794 0016 6A46     		mov	r2, sp
+ 795 0018 7220     		movs	r0, #114
+ 796 001a FFF7FEFF 		bl	simpleserial_put
+ 797              	.LVL81:
+ 102:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 798              		.loc 1 102 5 view .LVU231
+ 104:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 799              		.loc 1 104 1 is_stmt 0 view .LVU232
+ 800 001e 0020     		movs	r0, #0
+ 801 0020 05B0     		add	sp, sp, #20
+ 802              	.LCFI14:
+ 803              		.cfi_remember_state
+ 804              		.cfi_def_cfa_offset 12
+ 805              		@ sp needed
+ 806 0022 30BD     		pop	{r4, r5, pc}
+ 807              	.LVL82:
+ 808              	.L52:
+ 809              	.LCFI15:
+ 810              		.cfi_restore_state
+ 811              	.LBB14:
+  98:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     }
+ 812              		.loc 1 98 9 is_stmt 1 discriminator 3 view .LVU233
+  98:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     }
+ 813              		.loc 1 98 22 is_stmt 0 discriminator 3 view .LVU234
+ 814 0024 03F11005 		add	r5, r3, #16
+  98:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     }
+ 815              		.loc 1 98 35 discriminator 3 view .LVU235
+ 816 0028 04FB0303 		mla	r3, r4, r3, r0
+ 817              	.LVL83:
+  98:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     }
+ 818              		.loc 1 98 22 discriminator 3 view .LVU236
+ 819 002c 6D44     		add	r5, sp, r5
+ 820              	.LVL84:
+  98:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****     }
+ 821              		.loc 1 98 22 discriminator 3 view .LVU237
+ 822 002e 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 823 0030 05F8103C 		strb	r3, [r5, #-16]
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 824              		.loc 1 97 52 is_stmt 1 discriminator 3 view .LVU238
+ 825              	.LVL85:
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c ****         cmd_chars[i] = commands[i].c;
+ 826              		.loc 1 97 52 is_stmt 0 discriminator 3 view .LVU239
+ 827 0034 EAE7     		b	.L51
+ 828              	.L54:
+ 829 0036 00BF     		.align	2
+ 830              	.L53:
+ 831 0038 00000000 		.word	.LANCHOR0
+ 832              	.LBE14:
+ 833              		.cfi_endproc
+ 834              	.LFE4:
+ 836              		.section	.text.simpleserial_get,"ax",%progbits
+ 837              		.align	1
+ 838              		.global	simpleserial_get
+ 839              		.syntax unified
+ 840              		.thumb
+ 841              		.thumb_func
+ 842              		.fpu softvfp
+ 844              	simpleserial_get:
+ 845              	.LFB9:
+ 162:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t data_buf[MAX_SS_LEN];
+ 846              		.loc 1 162 1 is_stmt 1 view -0
+ 847              		.cfi_startproc
+ 848              		@ args = 0, pretend = 0, frame = 264
+ 849              		@ frame_needed = 0, uses_anonymous_args = 0
+ 163:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t err = 0;
+ 850              		.loc 1 163 2 view .LVU241
+ 164:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 851              		.loc 1 164 2 view .LVU242
+ 162:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	uint8_t data_buf[MAX_SS_LEN];
+ 852              		.loc 1 162 1 is_stmt 0 view .LVU243
+ 853 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 854              	.LCFI16:
+ 855              		.cfi_def_cfa_offset 32
+ 856              		.cfi_offset 4, -32
+ 857              		.cfi_offset 5, -28
+ 858              		.cfi_offset 6, -24
+ 859              		.cfi_offset 7, -20
+ 860              		.cfi_offset 8, -16
+ 861              		.cfi_offset 9, -12
+ 862              		.cfi_offset 10, -8
+ 863              		.cfi_offset 14, -4
+ 864 0004 C2B0     		sub	sp, sp, #264
+ 865              	.LCFI17:
+ 866              		.cfi_def_cfa_offset 296
+ 164:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 867              		.loc 1 164 10 view .LVU244
+ 868 0006 0025     		movs	r5, #0
+ 869 0008 02AE     		add	r6, sp, #8
+ 870 000a 8DF80750 		strb	r5, [sp, #7]
+ 166:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch(); //PTR, cmd, scmd, len
+ 871              		.loc 1 166 2 is_stmt 1 view .LVU245
+ 872              	.LBB15:
+ 166:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch(); //PTR, cmd, scmd, len
+ 873              		.loc 1 166 7 view .LVU246
+ 874              	.LVL86:
+ 166:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch(); //PTR, cmd, scmd, len
+ 875              		.loc 1 166 18 view .LVU247
+ 876 000e 3446     		mov	r4, r6
+ 877              	.LVL87:
+ 878              	.L58:
+ 167:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (data_buf[i] == FRAME_BYTE) {
+ 879              		.loc 1 167 3 view .LVU248
+ 167:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (data_buf[i] == FRAME_BYTE) {
+ 880              		.loc 1 167 17 is_stmt 0 view .LVU249
+ 881 0010 FFF7FEFF 		bl	getch
+ 882              	.LVL88:
+ 167:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (data_buf[i] == FRAME_BYTE) {
+ 883              		.loc 1 167 15 view .LVU250
+ 884 0014 06F8010B 		strb	r0, [r6], #1
+ 168:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			err = SS_ERR_FRAME_BYTE;
+ 885              		.loc 1 168 3 is_stmt 1 view .LVU251
+ 168:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			err = SS_ERR_FRAME_BYTE;
+ 886              		.loc 1 168 6 is_stmt 0 view .LVU252
+ 887 0018 58B9     		cbnz	r0, .L56
+ 888              	.LVL89:
+ 889              	.L63:
+ 169:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			goto ERROR;
+ 890              		.loc 1 169 4 is_stmt 1 view .LVU253
+ 169:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			goto ERROR;
+ 891              		.loc 1 169 8 is_stmt 0 view .LVU254
+ 892 001a 0523     		movs	r3, #5
+ 893              	.L72:
+ 894              	.LBE15:
+ 219:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 895              		.loc 1 219 7 view .LVU255
+ 896 001c 8DF80730 		strb	r3, [sp, #7]
+ 220:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	}
+ 897              		.loc 1 220 3 is_stmt 1 view .LVU256
+ 898              	.L57:
+ 226:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	return;
+ 899              		.loc 1 226 2 view .LVU257
+ 900 0020 0DF10702 		add	r2, sp, #7
+ 901 0024 0121     		movs	r1, #1
+ 902 0026 6520     		movs	r0, #101
+ 903 0028 FFF7FEFF 		bl	simpleserial_put
+ 904              	.LVL90:
+ 227:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** }
+ 905              		.loc 1 227 2 view .LVU258
+ 228:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 906              		.loc 1 228 1 is_stmt 0 view .LVU259
+ 907 002c 42B0     		add	sp, sp, #264
+ 908              	.LCFI18:
+ 909              		.cfi_remember_state
+ 910              		.cfi_def_cfa_offset 32
+ 911              		@ sp needed
+ 912 002e BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 913              	.LVL91:
+ 914              	.L56:
+ 915              	.LCFI19:
+ 916              		.cfi_restore_state
+ 917              	.LBB16:
+ 166:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch(); //PTR, cmd, scmd, len
+ 918              		.loc 1 166 25 is_stmt 1 discriminator 2 view .LVU260
+ 166:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch(); //PTR, cmd, scmd, len
+ 919              		.loc 1 166 26 is_stmt 0 discriminator 2 view .LVU261
+ 920 0032 0135     		adds	r5, r5, #1
+ 921              	.LVL92:
+ 166:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch(); //PTR, cmd, scmd, len
+ 922              		.loc 1 166 18 is_stmt 1 discriminator 2 view .LVU262
+ 166:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch(); //PTR, cmd, scmd, len
+ 923              		.loc 1 166 2 is_stmt 0 discriminator 2 view .LVU263
+ 924 0034 042D     		cmp	r5, #4
+ 925 0036 EBD1     		bne	.L58
+ 926              	.LBE16:
+ 173:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 927              		.loc 1 173 2 is_stmt 1 view .LVU264
+ 173:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 928              		.loc 1 173 23 is_stmt 0 view .LVU265
+ 929 0038 2946     		mov	r1, r5
+ 930 003a 2046     		mov	r0, r4
+ 931 003c FFF7FEFF 		bl	unstuff_data
+ 932              	.LVL93:
+ 177:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 933              		.loc 1 177 15 view .LVU266
+ 934 0040 254F     		ldr	r7, .L73
+ 179:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			break;
+ 935              		.loc 1 179 31 view .LVU267
+ 936 0042 6178     		ldrb	r1, [r4, #1]	@ zero_extendqisi2
+ 177:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 937              		.loc 1 177 15 view .LVU268
+ 938 0044 3A68     		ldr	r2, [r7]
+ 173:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 939              		.loc 1 173 23 view .LVU269
+ 940 0046 8046     		mov	r8, r0
+ 941              	.LVL94:
+ 176:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	for(c = 0; c < num_commands; c++)
+ 942              		.loc 1 176 2 is_stmt 1 view .LVU270
+ 177:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 943              		.loc 1 177 2 view .LVU271
+ 177:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 944              		.loc 1 177 2 is_stmt 0 view .LVU272
+ 945 0048 0023     		movs	r3, #0
+ 179:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			break;
+ 946              		.loc 1 179 17 view .LVU273
+ 947 004a 0C20     		movs	r0, #12
+ 948              	.LVL95:
+ 949              	.L59:
+ 177:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 950              		.loc 1 177 13 is_stmt 1 discriminator 1 view .LVU274
+ 177:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 951              		.loc 1 177 15 is_stmt 0 discriminator 1 view .LVU275
+ 952 004c 5FFA83F9 		uxtb	r9, r3
+ 177:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	{
+ 953              		.loc 1 177 2 discriminator 1 view .LVU276
+ 954 0050 9145     		cmp	r9, r2
+ 955 0052 02DB     		blt	.L61
+ 183:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_CMD;
+ 956              		.loc 1 183 2 is_stmt 1 view .LVU277
+ 183:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_CMD;
+ 957              		.loc 1 183 5 is_stmt 0 view .LVU278
+ 958 0054 07D1     		bne	.L60
+ 184:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 959              		.loc 1 184 3 is_stmt 1 view .LVU279
+ 184:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 960              		.loc 1 184 7 is_stmt 0 view .LVU280
+ 961 0056 0123     		movs	r3, #1
+ 962              	.LVL96:
+ 184:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 963              		.loc 1 184 7 view .LVU281
+ 964 0058 E0E7     		b	.L72
+ 965              	.LVL97:
+ 966              	.L61:
+ 179:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			break;
+ 967              		.loc 1 179 3 is_stmt 1 view .LVU282
+ 179:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			break;
+ 968              		.loc 1 179 17 is_stmt 0 view .LVU283
+ 969 005a 00FB0976 		mla	r6, r0, r9, r7
+ 179:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			break;
+ 970              		.loc 1 179 5 view .LVU284
+ 971 005e 0133     		adds	r3, r3, #1
+ 972              	.LVL98:
+ 179:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			break;
+ 973              		.loc 1 179 5 view .LVU285
+ 974 0060 3679     		ldrb	r6, [r6, #4]	@ zero_extendqisi2
+ 975 0062 8E42     		cmp	r6, r1
+ 976 0064 F2D1     		bne	.L59
+ 977              	.L60:
+ 190:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_LEN;
+ 978              		.loc 1 190 2 is_stmt 1 view .LVU286
+ 190:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_LEN;
+ 979              		.loc 1 190 15 is_stmt 0 view .LVU287
+ 980 0066 E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 190:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_LEN;
+ 981              		.loc 1 190 19 view .LVU288
+ 982 0068 0533     		adds	r3, r3, #5
+ 190:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_LEN;
+ 983              		.loc 1 190 5 view .LVU289
+ 984 006a 4345     		cmp	r3, r8
+ 985 006c 02DA     		bge	.L62
+ 986              	.LVL99:
+ 987              	.L64:
+ 191:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 988              		.loc 1 191 3 is_stmt 1 view .LVU290
+ 191:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 989              		.loc 1 191 7 is_stmt 0 view .LVU291
+ 990 006e 0423     		movs	r3, #4
+ 991 0070 D4E7     		b	.L72
+ 992              	.LVL100:
+ 993              	.L66:
+ 191:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 994              		.loc 1 191 7 view .LVU292
+ 995 0072 3546     		mov	r5, r6
+ 996              	.LVL101:
+ 997              	.L62:
+ 199:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (data_buf[i] == FRAME_BYTE) {
+ 998              		.loc 1 199 3 is_stmt 1 view .LVU293
+ 199:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (data_buf[i] == FRAME_BYTE) {
+ 999              		.loc 1 199 17 is_stmt 0 view .LVU294
+ 1000 0074 FFF7FEFF 		bl	getch
+ 1001              	.LVL102:
+ 199:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		if (data_buf[i] == FRAME_BYTE) {
+ 1002              		.loc 1 199 15 view .LVU295
+ 1003 0078 6055     		strb	r0, [r4, r5]
+ 200:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			err = SS_ERR_FRAME_BYTE;
+ 1004              		.loc 1 200 3 is_stmt 1 view .LVU296
+ 200:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 			err = SS_ERR_FRAME_BYTE;
+ 1005              		.loc 1 200 6 is_stmt 0 view .LVU297
+ 1006 007a 0028     		cmp	r0, #0
+ 1007 007c CDD0     		beq	.L63
+ 198:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch();
+ 1008              		.loc 1 198 30 is_stmt 1 view .LVU298
+ 198:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch();
+ 1009              		.loc 1 198 21 is_stmt 0 view .LVU299
+ 1010 007e E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 198:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch();
+ 1011              		.loc 1 198 31 view .LVU300
+ 1012 0080 6E1C     		adds	r6, r5, #1
+ 1013              	.LVL103:
+ 198:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch();
+ 1014              		.loc 1 198 9 is_stmt 1 view .LVU301
+ 198:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch();
+ 1015              		.loc 1 198 11 is_stmt 0 view .LVU302
+ 1016 0082 0433     		adds	r3, r3, #4
+ 198:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		data_buf[i] = getch();
+ 1017              		.loc 1 198 2 view .LVU303
+ 1018 0084 B342     		cmp	r3, r6
+ 1019 0086 F4DA     		bge	.L66
+ 207:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if (data_buf[i] != FRAME_BYTE) {
+ 1020              		.loc 1 207 2 is_stmt 1 view .LVU304
+ 207:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if (data_buf[i] != FRAME_BYTE) {
+ 1021              		.loc 1 207 16 is_stmt 0 view .LVU305
+ 1022 0088 FFF7FEFF 		bl	getch
+ 1023              	.LVL104:
+ 207:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if (data_buf[i] != FRAME_BYTE) {
+ 1024              		.loc 1 207 14 view .LVU306
+ 1025 008c A055     		strb	r0, [r4, r6]
+ 208:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_LEN;
+ 1026              		.loc 1 208 2 is_stmt 1 view .LVU307
+ 208:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_LEN;
+ 1027              		.loc 1 208 5 is_stmt 0 view .LVU308
+ 1028 008e 0028     		cmp	r0, #0
+ 1029 0090 EDD1     		bne	.L64
+ 214:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 1030              		.loc 1 214 2 is_stmt 1 view .LVU309
+ 1031 0092 C8F10101 		rsb	r1, r8, #1
+ 1032 0096 51FA86F1 		uxtab	r1, r1, r6
+ 1033 009a C9B2     		uxtb	r1, r1
+ 214:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 1034              		.loc 1 214 40 is_stmt 0 view .LVU310
+ 1035 009c 5FFA86FA 		uxtb	r10, r6
+ 214:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 1036              		.loc 1 214 2 view .LVU311
+ 1037 00a0 04EB0800 		add	r0, r4, r8
+ 1038 00a4 FFF7FEFF 		bl	unstuff_data
+ 1039              	.LVL105:
+ 217:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if (crc != data_buf[i-1]) {
+ 1040              		.loc 1 217 2 is_stmt 1 view .LVU312
+ 217:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 	if (crc != data_buf[i-1]) {
+ 1041              		.loc 1 217 16 is_stmt 0 view .LVU313
+ 1042 00a8 AAF10201 		sub	r1, r10, #2
+ 1043 00ac C9B2     		uxtb	r1, r1
+ 1044 00ae 0DF10900 		add	r0, sp, #9
+ 1045 00b2 FFF7FEFF 		bl	ss_crc
+ 1046              	.LVL106:
+ 218:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_CRC;
+ 1047              		.loc 1 218 2 is_stmt 1 view .LVU314
+ 218:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		err = SS_ERR_CRC;
+ 1048              		.loc 1 218 5 is_stmt 0 view .LVU315
+ 1049 00b6 635D     		ldrb	r3, [r4, r5]	@ zero_extendqisi2
+ 1050 00b8 8342     		cmp	r3, r0
+ 1051 00ba 01D0     		beq	.L65
+ 219:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 1052              		.loc 1 219 3 is_stmt 1 view .LVU316
+ 219:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 		goto ERROR;
+ 1053              		.loc 1 219 7 is_stmt 0 view .LVU317
+ 1054 00bc 0223     		movs	r3, #2
+ 1055 00be ADE7     		b	.L72
+ 1056              	.L65:
+ 223:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 1057              		.loc 1 223 2 is_stmt 1 view .LVU318
+ 223:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 1058              		.loc 1 223 19 is_stmt 0 view .LVU319
+ 1059 00c0 0C23     		movs	r3, #12
+ 1060 00c2 03FB0977 		mla	r7, r3, r9, r7
+ 223:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 1061              		.loc 1 223 8 view .LVU320
+ 1062 00c6 E278     		ldrb	r2, [r4, #3]	@ zero_extendqisi2
+ 1063 00c8 FD68     		ldr	r5, [r7, #12]
+ 1064 00ca A178     		ldrb	r1, [r4, #2]	@ zero_extendqisi2
+ 1065 00cc 6078     		ldrb	r0, [r4, #1]	@ zero_extendqisi2
+ 1066              	.LVL107:
+ 223:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 1067              		.loc 1 223 8 view .LVU321
+ 1068 00ce 6B44     		add	r3, sp, r3
+ 1069 00d0 A847     		blx	r5
+ 1070              	.LVL108:
+ 223:/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.c **** 
+ 1071              		.loc 1 223 6 view .LVU322
+ 1072 00d2 8DF80700 		strb	r0, [sp, #7]
+ 1073 00d6 A3E7     		b	.L57
+ 1074              	.L74:
+ 1075              		.align	2
+ 1076              	.L73:
+ 1077 00d8 00000000 		.word	.LANCHOR0
+ 1078              		.cfi_endproc
+ 1079              	.LFE9:
+ 1081              		.bss
+ 1082              		.align	2
+ 1083              		.set	.LANCHOR0,. + 0
+ 1086              	num_commands:
+ 1087 0000 00000000 		.space	4
+ 1090              	commands:
+ 1091 0004 00000000 		.space	192
+ 1091      00000000 
+ 1091      00000000 
+ 1091      00000000 
+ 1091      00000000 
+ 1092              		.text
+ 1093              	.Letext0:
+ 1094              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 1095              		.file 3 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.h"
+ 1096              		.file 4 "/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.h"
+ 1097              		.file 5 "<built-in>"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 simpleserial.c
+     /tmp/cctxM2Wo.s:16     .text.ss_crc:0000000000000000 $t
+     /tmp/cctxM2Wo.s:24     .text.ss_crc:0000000000000000 ss_crc
+     /tmp/cctxM2Wo.s:90     .text.hex_decode:0000000000000000 $t
+     /tmp/cctxM2Wo.s:97     .text.hex_decode:0000000000000000 hex_decode
+     /tmp/cctxM2Wo.s:265    .text.ss_puts:0000000000000000 $t
+     /tmp/cctxM2Wo.s:272    .text.ss_puts:0000000000000000 ss_puts
+     /tmp/cctxM2Wo.s:307    .text.stuff_data:0000000000000000 $t
+     /tmp/cctxM2Wo.s:314    .text.stuff_data:0000000000000000 stuff_data
+     /tmp/cctxM2Wo.s:378    .text.unstuff_data:0000000000000000 $t
+     /tmp/cctxM2Wo.s:385    .text.unstuff_data:0000000000000000 unstuff_data
+     /tmp/cctxM2Wo.s:445    .text.simpleserial_addcmd:0000000000000000 $t
+     /tmp/cctxM2Wo.s:452    .text.simpleserial_addcmd:0000000000000000 simpleserial_addcmd
+     /tmp/cctxM2Wo.s:523    .text.simpleserial_addcmd:0000000000000030 $d
+     /tmp/cctxM2Wo.s:528    .text.simpleserial_init:0000000000000000 $t
+     /tmp/cctxM2Wo.s:535    .text.simpleserial_init:0000000000000000 simpleserial_init
+     /tmp/cctxM2Wo.s:570    .text.simpleserial_init:000000000000001c $d
+     /tmp/cctxM2Wo.s:693    .text.check_version:0000000000000000 check_version
+     /tmp/cctxM2Wo.s:742    .text.ss_get_commands:0000000000000000 ss_get_commands
+     /tmp/cctxM2Wo.s:576    .text.simpleserial_put:0000000000000000 $t
+     /tmp/cctxM2Wo.s:583    .text.simpleserial_put:0000000000000000 simpleserial_put
+     /tmp/cctxM2Wo.s:686    .text.check_version:0000000000000000 $t
+     /tmp/cctxM2Wo.s:735    .text.ss_get_commands:0000000000000000 $t
+     /tmp/cctxM2Wo.s:831    .text.ss_get_commands:0000000000000038 $d
+     /tmp/cctxM2Wo.s:837    .text.simpleserial_get:0000000000000000 $t
+     /tmp/cctxM2Wo.s:844    .text.simpleserial_get:0000000000000000 simpleserial_get
+     /tmp/cctxM2Wo.s:1077   .text.simpleserial_get:00000000000000d8 $d
+     /tmp/cctxM2Wo.s:1082   .bss:0000000000000000 $d
+     /tmp/cctxM2Wo.s:1086   .bss:0000000000000000 num_commands
+     /tmp/cctxM2Wo.s:1090   .bss:0000000000000004 commands
+
+UNDEFINED SYMBOLS
+putch
+memcpy
+getch

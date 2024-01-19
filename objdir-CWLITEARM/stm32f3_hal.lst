@@ -1,0 +1,820 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"stm32f3_hal.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.platform_init,"ax",%progbits
+  16              		.align	1
+  17              		.global	platform_init
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	platform_init:
+  25              	.LFB126:
+  26              		.file 1 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c"
+   1:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+   2:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #include "stm32f3_hal.h"
+   3:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #include "stm32f3_hal_lowlevel.h"
+   4:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #include "stm32f3xx_hal_rcc.h"
+   5:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #include "stm32f3xx_hal_gpio.h"
+   6:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #include "stm32f3xx_hal_dma.h"
+   7:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #include "stm32f3xx_hal_uart.h"
+   8:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+   9:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** UART_HandleTypeDef UartHandle;
+  10:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  11:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  12:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** void platform_init(void)
+  13:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+  27              		.loc 1 13 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 88
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  14:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   //HAL_Init();
+  15:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  16:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   #ifdef USE_INTERNAL_CLK
+  17:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitTypeDef RCC_OscInitStruct;
+  18:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  19:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.HSEState       = RCC_HSE_OFF;
+  20:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.HSIState       = RCC_HSI_ON;
+  21:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.PLL.PLLSource  = RCC_PLL_NONE;
+  22:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      HAL_RCC_OscConfig(&RCC_OscInitStruct);
+  23:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  24:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  25:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.ClockType      = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_
+  26:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_HSI;
+  27:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
+  28:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  29:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  30:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      uint32_t flash_latency = 0;
+  31:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      HAL_RCC_ClockConfig(&RCC_ClkInitStruct, flash_latency);
+  32:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   #else
+  33:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitTypeDef RCC_OscInitStruct;
+  31              		.loc 1 33 6 view .LVU1
+  34:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE | RCC_OSCILLATORTYPE_HSI;
+  32              		.loc 1 34 6 view .LVU2
+  13:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   //HAL_Init();
+  33              		.loc 1 13 1 is_stmt 0 view .LVU3
+  34 0000 70B5     		push	{r4, r5, r6, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 16
+  37              		.cfi_offset 4, -16
+  38              		.cfi_offset 5, -12
+  39              		.cfi_offset 6, -8
+  40              		.cfi_offset 14, -4
+  41 0002 96B0     		sub	sp, sp, #88
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 104
+  35:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.HSEState       = RCC_HSE_BYPASS;
+  36:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.HSIState       = RCC_HSI_OFF;
+  44              		.loc 1 36 39 view .LVU4
+  45 0004 0024     		movs	r4, #0
+  35:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.HSEState       = RCC_HSE_BYPASS;
+  46              		.loc 1 35 39 view .LVU5
+  47 0006 0326     		movs	r6, #3
+  48 0008 4FF4A023 		mov	r3, #327680
+  37:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.PLL.PLLSource  = RCC_PLL_NONE;
+  38:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      HAL_RCC_OscConfig(&RCC_OscInitStruct);
+  49              		.loc 1 38 6 view .LVU6
+  50 000c 0CA8     		add	r0, sp, #48
+  39:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  40:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  41:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.ClockType      = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_
+  42:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_HSE;
+  51              		.loc 1 42 39 view .LVU7
+  52 000e 0125     		movs	r5, #1
+  35:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.HSIState       = RCC_HSI_OFF;
+  53              		.loc 1 35 39 view .LVU8
+  54 0010 CDE90C63 		strd	r6, r3, [sp, #48]
+  36:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.PLL.PLLSource  = RCC_PLL_NONE;
+  55              		.loc 1 36 6 is_stmt 1 view .LVU9
+  36:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_OscInitStruct.PLL.PLLSource  = RCC_PLL_NONE;
+  56              		.loc 1 36 39 is_stmt 0 view .LVU10
+  57 0014 1094     		str	r4, [sp, #64]
+  37:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      HAL_RCC_OscConfig(&RCC_OscInitStruct);
+  58              		.loc 1 37 6 is_stmt 1 view .LVU11
+  37:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      HAL_RCC_OscConfig(&RCC_OscInitStruct);
+  59              		.loc 1 37 39 is_stmt 0 view .LVU12
+  60 0016 1494     		str	r4, [sp, #80]
+  38:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  61              		.loc 1 38 6 is_stmt 1 view .LVU13
+  62 0018 FFF7FEFF 		bl	HAL_RCC_OscConfig
+  63              	.LVL0:
+  40:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.ClockType      = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_
+  64              		.loc 1 40 6 view .LVU14
+  41:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_HSE;
+  65              		.loc 1 41 6 view .LVU15
+  66              		.loc 1 42 39 is_stmt 0 view .LVU16
+  67 001c 0F23     		movs	r3, #15
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
+  44:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  45:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  46:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      uint32_t flash_latency = 0;
+  47:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      HAL_RCC_ClockConfig(&RCC_ClkInitStruct, flash_latency);
+  68              		.loc 1 47 6 view .LVU17
+  69 001e 2146     		mov	r1, r4
+  70 0020 02A8     		add	r0, sp, #8
+  42:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
+  71              		.loc 1 42 39 view .LVU18
+  72 0022 CDE90235 		strd	r3, r5, [sp, #8]
+  43:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
+  73              		.loc 1 43 6 is_stmt 1 view .LVU19
+  44:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  74              		.loc 1 44 39 is_stmt 0 view .LVU20
+  75 0026 CDE90444 		strd	r4, r4, [sp, #16]
+  45:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      uint32_t flash_latency = 0;
+  76              		.loc 1 45 6 is_stmt 1 view .LVU21
+  45:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      uint32_t flash_latency = 0;
+  77              		.loc 1 45 39 is_stmt 0 view .LVU22
+  78 002a 0694     		str	r4, [sp, #24]
+  46:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      HAL_RCC_ClockConfig(&RCC_ClkInitStruct, flash_latency);
+  79              		.loc 1 46 6 is_stmt 1 view .LVU23
+  80              	.LVL1:
+  81              		.loc 1 47 6 view .LVU24
+  82 002c FFF7FEFF 		bl	HAL_RCC_ClockConfig
+  83              	.LVL2:
+  48:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   #endif
+  49:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  50:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  51:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  52:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  53:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #if (PLATFORM==CWLITEARM)
+  54:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   __HAL_RCC_GPIOC_CLK_ENABLE();
+  84              		.loc 1 54 3 view .LVU25
+  85              	.LBB2:
+  86              		.loc 1 54 3 view .LVU26
+  87              		.loc 1 54 3 view .LVU27
+  88 0030 114B     		ldr	r3, .L2
+  89 0032 5A69     		ldr	r2, [r3, #20]
+  90 0034 42F40022 		orr	r2, r2, #524288
+  91 0038 5A61     		str	r2, [r3, #20]
+  92              		.loc 1 54 3 view .LVU28
+  93 003a 5B69     		ldr	r3, [r3, #20]
+  94              	.LBE2:
+  55:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+  56:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Pin       = GPIO_PIN_13 | GPIO_PIN_14;
+  57:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Mode      = GPIO_MODE_OUTPUT_PP;
+  58:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Pull      = GPIO_NOPULL;
+  59:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Speed     = GPIO_SPEED_FREQ_HIGH;
+  95              		.loc 1 59 22 is_stmt 0 view .LVU29
+  96 003c CDE90946 		strd	r4, r6, [sp, #36]
+  97              	.LBB3:
+  54:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+  98              		.loc 1 54 3 view .LVU30
+  99 0040 03F40023 		and	r3, r3, #524288
+ 100              	.LBE3:
+  60:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_GPIO_Init(GPIOC, &GpioInit);
+ 101              		.loc 1 60 3 view .LVU31
+ 102 0044 0D4C     		ldr	r4, .L2+4
+ 103              	.LBB4:
+  54:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+ 104              		.loc 1 54 3 view .LVU32
+ 105 0046 0193     		str	r3, [sp, #4]
+  54:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+ 106              		.loc 1 54 3 is_stmt 1 view .LVU33
+ 107 0048 019B     		ldr	r3, [sp, #4]
+ 108              	.LBE4:
+  54:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+ 109              		.loc 1 54 3 view .LVU34
+  55:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+ 110              		.loc 1 55 3 view .LVU35
+  56:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Mode      = GPIO_MODE_OUTPUT_PP;
+ 111              		.loc 1 56 3 view .LVU36
+ 112              		.loc 1 60 3 is_stmt 0 view .LVU37
+ 113 004a 07A9     		add	r1, sp, #28
+  56:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Mode      = GPIO_MODE_OUTPUT_PP;
+ 114              		.loc 1 56 22 view .LVU38
+ 115 004c 4FF4C043 		mov	r3, #24576
+ 116              		.loc 1 60 3 view .LVU39
+ 117 0050 2046     		mov	r0, r4
+  57:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Pull      = GPIO_NOPULL;
+ 118              		.loc 1 57 22 view .LVU40
+ 119 0052 CDE90735 		strd	r3, r5, [sp, #28]
+  58:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Speed     = GPIO_SPEED_FREQ_HIGH;
+ 120              		.loc 1 58 3 is_stmt 1 view .LVU41
+ 121              		.loc 1 60 3 view .LVU42
+ 122 0056 FFF7FEFF 		bl	HAL_GPIO_Init
+ 123              	.LVL3:
+  61:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  62:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
+ 124              		.loc 1 62 3 view .LVU43
+ 125 005a 2A46     		mov	r2, r5
+ 126 005c 2046     		mov	r0, r4
+ 127 005e 4FF40051 		mov	r1, #8192
+ 128 0062 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 129              	.LVL4:
+  63:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, SET);
+ 130              		.loc 1 63 3 view .LVU44
+ 131 0066 2A46     		mov	r2, r5
+ 132 0068 4FF48041 		mov	r1, #16384
+ 133 006c 2046     		mov	r0, r4
+ 134 006e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 135              	.LVL5:
+  64:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #endif
+  65:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** }
+ 136              		.loc 1 65 1 is_stmt 0 view .LVU45
+ 137 0072 16B0     		add	sp, sp, #88
+ 138              	.LCFI2:
+ 139              		.cfi_def_cfa_offset 16
+ 140              		@ sp needed
+ 141 0074 70BD     		pop	{r4, r5, r6, pc}
+ 142              	.L3:
+ 143 0076 00BF     		.align	2
+ 144              	.L2:
+ 145 0078 00100240 		.word	1073876992
+ 146 007c 00080048 		.word	1207961600
+ 147              		.cfi_endproc
+ 148              	.LFE126:
+ 150              		.section	.text.init_uart,"ax",%progbits
+ 151              		.align	1
+ 152              		.global	init_uart
+ 153              		.syntax unified
+ 154              		.thumb
+ 155              		.thumb_func
+ 156              		.fpu softvfp
+ 158              	init_uart:
+ 159              	.LFB127:
+  66:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  67:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** void init_uart(void)
+  68:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+ 160              		.loc 1 68 1 is_stmt 1 view -0
+ 161              		.cfi_startproc
+ 162              		@ args = 0, pretend = 0, frame = 32
+ 163              		@ frame_needed = 0, uses_anonymous_args = 0
+  69:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+ 164              		.loc 1 69 3 view .LVU47
+  70:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Pin       = GPIO_PIN_9 | GPIO_PIN_10;
+ 165              		.loc 1 70 3 view .LVU48
+  68:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+ 166              		.loc 1 68 1 is_stmt 0 view .LVU49
+ 167 0000 10B5     		push	{r4, lr}
+ 168              	.LCFI3:
+ 169              		.cfi_def_cfa_offset 8
+ 170              		.cfi_offset 4, -8
+ 171              		.cfi_offset 14, -4
+  71:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Mode      = GPIO_MODE_AF_PP;
+ 172              		.loc 1 71 22 view .LVU50
+ 173 0002 4FF4C062 		mov	r2, #1536
+  68:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+ 174              		.loc 1 68 1 view .LVU51
+ 175 0006 88B0     		sub	sp, sp, #32
+ 176              	.LCFI4:
+ 177              		.cfi_def_cfa_offset 40
+ 178              		.loc 1 71 22 view .LVU52
+ 179 0008 0223     		movs	r3, #2
+ 180 000a CDE90323 		strd	r2, r3, [sp, #12]
+  72:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Pull      = GPIO_PULLUP;
+ 181              		.loc 1 72 3 is_stmt 1 view .LVU53
+  73:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Speed     = GPIO_SPEED_FREQ_HIGH;
+ 182              		.loc 1 73 22 is_stmt 0 view .LVU54
+ 183 000e 0121     		movs	r1, #1
+ 184 0010 0323     		movs	r3, #3
+ 185 0012 CDE90513 		strd	r1, r3, [sp, #20]
+  74:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Alternate = GPIO_AF7_USART1;
+ 186              		.loc 1 74 3 is_stmt 1 view .LVU55
+ 187              	.LBB5:
+  75:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   __GPIOA_CLK_ENABLE();
+ 188              		.loc 1 75 3 is_stmt 0 view .LVU56
+ 189 0016 164C     		ldr	r4, .L5
+ 190              	.LBE5:
+  74:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Alternate = GPIO_AF7_USART1;
+ 191              		.loc 1 74 22 view .LVU57
+ 192 0018 0723     		movs	r3, #7
+ 193 001a 0793     		str	r3, [sp, #28]
+ 194              		.loc 1 75 3 is_stmt 1 view .LVU58
+ 195              	.LBB6:
+ 196              		.loc 1 75 3 view .LVU59
+ 197              		.loc 1 75 3 view .LVU60
+ 198 001c 6369     		ldr	r3, [r4, #20]
+ 199 001e 43F40033 		orr	r3, r3, #131072
+ 200 0022 6361     		str	r3, [r4, #20]
+ 201              		.loc 1 75 3 view .LVU61
+ 202 0024 6369     		ldr	r3, [r4, #20]
+ 203 0026 03F40033 		and	r3, r3, #131072
+ 204 002a 0193     		str	r3, [sp, #4]
+ 205              		.loc 1 75 3 view .LVU62
+ 206              	.LBE6:
+  76:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_GPIO_Init(GPIOA, &GpioInit);
+ 207              		.loc 1 76 3 is_stmt 0 view .LVU63
+ 208 002c 03A9     		add	r1, sp, #12
+ 209 002e 4FF09040 		mov	r0, #1207959552
+ 210              	.LBB7:
+  75:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   __GPIOA_CLK_ENABLE();
+ 211              		.loc 1 75 3 view .LVU64
+ 212 0032 019B     		ldr	r3, [sp, #4]
+ 213              	.LBE7:
+  75:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   __GPIOA_CLK_ENABLE();
+ 214              		.loc 1 75 3 is_stmt 1 view .LVU65
+ 215              		.loc 1 76 3 view .LVU66
+ 216 0034 FFF7FEFF 		bl	HAL_GPIO_Init
+ 217              	.LVL6:
+  77:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  78:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   UartHandle.Instance        = USART1;
+ 218              		.loc 1 78 3 view .LVU67
+ 219              		.loc 1 78 30 is_stmt 0 view .LVU68
+ 220 0038 0E48     		ldr	r0, .L5+4
+  79:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   #if SS_VER==SS_VER_2_1
+  80:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   UartHandle.Init.BaudRate   = 230400;
+ 221              		.loc 1 80 30 view .LVU69
+ 222 003a DFF83CC0 		ldr	ip, .L5+8
+ 223 003e 4FF46133 		mov	r3, #230400
+ 224 0042 C0E900C3 		strd	ip, r3, [r0]
+  81:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   #else
+  82:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   UartHandle.Init.BaudRate   = 38400;
+  83:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   #endif
+  84:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
+ 225              		.loc 1 84 3 is_stmt 1 view .LVU70
+ 226              		.loc 1 84 30 is_stmt 0 view .LVU71
+ 227 0046 0023     		movs	r3, #0
+  85:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   UartHandle.Init.StopBits   = UART_STOPBITS_1;
+ 228              		.loc 1 85 30 view .LVU72
+ 229 0048 C0E90233 		strd	r3, r3, [r0, #8]
+  86:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   UartHandle.Init.Parity     = UART_PARITY_NONE;
+ 230              		.loc 1 86 3 is_stmt 1 view .LVU73
+ 231              		.loc 1 86 30 is_stmt 0 view .LVU74
+ 232 004c 0361     		str	r3, [r0, #16]
+  87:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
+ 233              		.loc 1 87 3 is_stmt 1 view .LVU75
+ 234              		.loc 1 87 30 is_stmt 0 view .LVU76
+ 235 004e 8361     		str	r3, [r0, #24]
+  88:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   UartHandle.Init.Mode       = UART_MODE_TX_RX;
+ 236              		.loc 1 88 3 is_stmt 1 view .LVU77
+ 237              		.loc 1 88 30 is_stmt 0 view .LVU78
+ 238 0050 0C23     		movs	r3, #12
+ 239 0052 4361     		str	r3, [r0, #20]
+  89:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   __USART1_CLK_ENABLE();
+ 240              		.loc 1 89 3 is_stmt 1 view .LVU79
+ 241              	.LBB8:
+ 242              		.loc 1 89 3 view .LVU80
+ 243              		.loc 1 89 3 view .LVU81
+ 244 0054 A369     		ldr	r3, [r4, #24]
+ 245 0056 43F48043 		orr	r3, r3, #16384
+ 246 005a A361     		str	r3, [r4, #24]
+ 247              		.loc 1 89 3 view .LVU82
+ 248 005c A369     		ldr	r3, [r4, #24]
+ 249 005e 03F48043 		and	r3, r3, #16384
+ 250 0062 0293     		str	r3, [sp, #8]
+ 251              		.loc 1 89 3 view .LVU83
+ 252 0064 029B     		ldr	r3, [sp, #8]
+ 253              	.LBE8:
+ 254              		.loc 1 89 3 view .LVU84
+  90:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_UART_Init(&UartHandle);
+ 255              		.loc 1 90 3 view .LVU85
+ 256 0066 FFF7FEFF 		bl	HAL_UART_Init
+ 257              	.LVL7:
+  91:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** }
+ 258              		.loc 1 91 1 is_stmt 0 view .LVU86
+ 259 006a 08B0     		add	sp, sp, #32
+ 260              	.LCFI5:
+ 261              		.cfi_def_cfa_offset 8
+ 262              		@ sp needed
+ 263 006c 10BD     		pop	{r4, pc}
+ 264              	.L6:
+ 265 006e 00BF     		.align	2
+ 266              	.L5:
+ 267 0070 00100240 		.word	1073876992
+ 268 0074 00000000 		.word	.LANCHOR0
+ 269 0078 00380140 		.word	1073821696
+ 270              		.cfi_endproc
+ 271              	.LFE127:
+ 273              		.section	.text.trigger_setup,"ax",%progbits
+ 274              		.align	1
+ 275              		.global	trigger_setup
+ 276              		.syntax unified
+ 277              		.thumb
+ 278              		.thumb_func
+ 279              		.fpu softvfp
+ 281              	trigger_setup:
+ 282              	.LFB128:
+  92:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  93:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** void trigger_setup(void)
+  94:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+ 283              		.loc 1 94 1 is_stmt 1 view -0
+ 284              		.cfi_startproc
+ 285              		@ args = 0, pretend = 0, frame = 24
+ 286              		@ frame_needed = 0, uses_anonymous_args = 0
+  95:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+ 287              		.loc 1 95 3 view .LVU88
+ 288              	.LBB9:
+ 289              		.loc 1 95 3 view .LVU89
+ 290              		.loc 1 95 3 view .LVU90
+ 291 0000 104B     		ldr	r3, .L8
+ 292              	.LBE9:
+  94:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+ 293              		.loc 1 94 1 is_stmt 0 view .LVU91
+ 294 0002 30B5     		push	{r4, r5, lr}
+ 295              	.LCFI6:
+ 296              		.cfi_def_cfa_offset 12
+ 297              		.cfi_offset 4, -12
+ 298              		.cfi_offset 5, -8
+ 299              		.cfi_offset 14, -4
+ 300              	.LBB10:
+ 301              		.loc 1 95 3 view .LVU92
+ 302 0004 5A69     		ldr	r2, [r3, #20]
+ 303 0006 42F40032 		orr	r2, r2, #131072
+ 304 000a 5A61     		str	r2, [r3, #20]
+ 305              		.loc 1 95 3 is_stmt 1 view .LVU93
+ 306 000c 5B69     		ldr	r3, [r3, #20]
+ 307              	.LBE10:
+  94:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+ 308              		.loc 1 94 1 is_stmt 0 view .LVU94
+ 309 000e 87B0     		sub	sp, sp, #28
+ 310              	.LCFI7:
+ 311              		.cfi_def_cfa_offset 40
+ 312              	.LBB11:
+ 313              		.loc 1 95 3 view .LVU95
+ 314 0010 03F40033 		and	r3, r3, #131072
+ 315 0014 0093     		str	r3, [sp]
+ 316              		.loc 1 95 3 is_stmt 1 view .LVU96
+ 317 0016 009B     		ldr	r3, [sp]
+ 318              	.LBE11:
+ 319              		.loc 1 95 3 view .LVU97
+  96:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+  97:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GPIO_InitTypeDef GpioInit;
+ 320              		.loc 1 97 3 view .LVU98
+  98:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Pin       = GPIO_PIN_12;
+ 321              		.loc 1 98 3 view .LVU99
+  99:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Mode      = GPIO_MODE_OUTPUT_PP;
+ 322              		.loc 1 99 22 is_stmt 0 view .LVU100
+ 323 0018 4FF48054 		mov	r4, #4096
+ 324 001c 0123     		movs	r3, #1
+ 325 001e CDE90143 		strd	r4, r3, [sp, #4]
+ 100:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Pull      = GPIO_NOPULL;
+ 326              		.loc 1 100 3 is_stmt 1 view .LVU101
+ 101:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Speed     = GPIO_SPEED_FREQ_HIGH;
+ 327              		.loc 1 101 22 is_stmt 0 view .LVU102
+ 328 0022 0025     		movs	r5, #0
+ 329 0024 0323     		movs	r3, #3
+ 102:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_GPIO_Init(GPIOA, &GpioInit);
+ 330              		.loc 1 102 3 view .LVU103
+ 331 0026 01A9     		add	r1, sp, #4
+ 332 0028 4FF09040 		mov	r0, #1207959552
+ 101:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   GpioInit.Speed     = GPIO_SPEED_FREQ_HIGH;
+ 333              		.loc 1 101 22 view .LVU104
+ 334 002c CDE90353 		strd	r5, r3, [sp, #12]
+ 335              		.loc 1 102 3 is_stmt 1 view .LVU105
+ 336 0030 FFF7FEFF 		bl	HAL_GPIO_Init
+ 337              	.LVL8:
+ 103:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+ 104:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, RESET);
+ 338              		.loc 1 104 3 view .LVU106
+ 339 0034 2A46     		mov	r2, r5
+ 340 0036 2146     		mov	r1, r4
+ 341 0038 4FF09040 		mov	r0, #1207959552
+ 342 003c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 343              	.LVL9:
+ 105:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** }
+ 344              		.loc 1 105 1 is_stmt 0 view .LVU107
+ 345 0040 07B0     		add	sp, sp, #28
+ 346              	.LCFI8:
+ 347              		.cfi_def_cfa_offset 12
+ 348              		@ sp needed
+ 349 0042 30BD     		pop	{r4, r5, pc}
+ 350              	.L9:
+ 351              		.align	2
+ 352              	.L8:
+ 353 0044 00100240 		.word	1073876992
+ 354              		.cfi_endproc
+ 355              	.LFE128:
+ 357              		.section	.text.trigger_high,"ax",%progbits
+ 358              		.align	1
+ 359              		.global	trigger_high
+ 360              		.syntax unified
+ 361              		.thumb
+ 362              		.thumb_func
+ 363              		.fpu softvfp
+ 365              	trigger_high:
+ 366              	.LFB129:
+ 106:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+ 107:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** void trigger_high(void)
+ 108:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+ 367              		.loc 1 108 1 is_stmt 1 view -0
+ 368              		.cfi_startproc
+ 369              		@ args = 0, pretend = 0, frame = 0
+ 370              		@ frame_needed = 0, uses_anonymous_args = 0
+ 371              		@ link register save eliminated.
+ 109:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, SET);
+ 372              		.loc 1 109 3 view .LVU109
+ 373 0000 0122     		movs	r2, #1
+ 374 0002 4FF48051 		mov	r1, #4096
+ 375 0006 4FF09040 		mov	r0, #1207959552
+ 376 000a FFF7FEBF 		b	HAL_GPIO_WritePin
+ 377              	.LVL10:
+ 378              		.cfi_endproc
+ 379              	.LFE129:
+ 381              		.section	.text.trigger_low,"ax",%progbits
+ 382              		.align	1
+ 383              		.global	trigger_low
+ 384              		.syntax unified
+ 385              		.thumb
+ 386              		.thumb_func
+ 387              		.fpu softvfp
+ 389              	trigger_low:
+ 390              	.LFB130:
+ 110:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** }
+ 111:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+ 112:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** void trigger_low(void)
+ 113:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+ 391              		.loc 1 113 1 view -0
+ 392              		.cfi_startproc
+ 393              		@ args = 0, pretend = 0, frame = 0
+ 394              		@ frame_needed = 0, uses_anonymous_args = 0
+ 395              		@ link register save eliminated.
+ 114:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, RESET);
+ 396              		.loc 1 114 3 view .LVU111
+ 397 0000 0022     		movs	r2, #0
+ 398 0002 4FF48051 		mov	r1, #4096
+ 399 0006 4FF09040 		mov	r0, #1207959552
+ 400 000a FFF7FEBF 		b	HAL_GPIO_WritePin
+ 401              	.LVL11:
+ 402              		.cfi_endproc
+ 403              	.LFE130:
+ 405              		.section	.text.getch,"ax",%progbits
+ 406              		.align	1
+ 407              		.global	getch
+ 408              		.syntax unified
+ 409              		.thumb
+ 410              		.thumb_func
+ 411              		.fpu softvfp
+ 413              	getch:
+ 414              	.LFB131:
+ 115:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** }
+ 116:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+ 117:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** char getch(void)
+ 118:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+ 415              		.loc 1 118 1 view -0
+ 416              		.cfi_startproc
+ 417              		@ args = 0, pretend = 0, frame = 8
+ 418              		@ frame_needed = 0, uses_anonymous_args = 0
+ 119:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   uint8_t d;
+ 419              		.loc 1 119 3 view .LVU113
+ 120:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   while (HAL_UART_Receive(&UartHandle, &d, 1, 5000) != HAL_OK)
+ 420              		.loc 1 120 3 view .LVU114
+ 118:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   uint8_t d;
+ 421              		.loc 1 118 1 is_stmt 0 view .LVU115
+ 422 0000 37B5     		push	{r0, r1, r2, r4, r5, lr}
+ 423              	.LCFI9:
+ 424              		.cfi_def_cfa_offset 24
+ 425              		.cfi_offset 4, -12
+ 426              		.cfi_offset 5, -8
+ 427              		.cfi_offset 14, -4
+ 428              		.loc 1 120 10 view .LVU116
+ 429 0002 0A4D     		ldr	r5, .L15
+ 121:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****     USART1->ICR |= (1 << 3);
+ 430              		.loc 1 121 17 view .LVU117
+ 431 0004 0A4C     		ldr	r4, .L15+4
+ 432              	.L13:
+ 120:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   while (HAL_UART_Receive(&UartHandle, &d, 1, 5000) != HAL_OK)
+ 433              		.loc 1 120 9 is_stmt 1 view .LVU118
+ 120:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   while (HAL_UART_Receive(&UartHandle, &d, 1, 5000) != HAL_OK)
+ 434              		.loc 1 120 10 is_stmt 0 view .LVU119
+ 435 0006 41F28833 		movw	r3, #5000
+ 436 000a 0122     		movs	r2, #1
+ 437 000c 0DF10701 		add	r1, sp, #7
+ 438 0010 2846     		mov	r0, r5
+ 439 0012 FFF7FEFF 		bl	HAL_UART_Receive
+ 440              	.LVL12:
+ 120:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   while (HAL_UART_Receive(&UartHandle, &d, 1, 5000) != HAL_OK)
+ 441              		.loc 1 120 9 view .LVU120
+ 442 0016 18B9     		cbnz	r0, .L14
+ 122:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   //putch(d);
+ 123:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   return d;
+ 443              		.loc 1 123 3 is_stmt 1 view .LVU121
+ 124:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** }
+ 444              		.loc 1 124 1 is_stmt 0 view .LVU122
+ 445 0018 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+ 446 001c 03B0     		add	sp, sp, #12
+ 447              	.LCFI10:
+ 448              		.cfi_remember_state
+ 449              		.cfi_def_cfa_offset 12
+ 450              		@ sp needed
+ 451 001e 30BD     		pop	{r4, r5, pc}
+ 452              	.L14:
+ 453              	.LCFI11:
+ 454              		.cfi_restore_state
+ 121:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****     USART1->ICR |= (1 << 3);
+ 455              		.loc 1 121 5 is_stmt 1 view .LVU123
+ 121:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****     USART1->ICR |= (1 << 3);
+ 456              		.loc 1 121 17 is_stmt 0 view .LVU124
+ 457 0020 236A     		ldr	r3, [r4, #32]
+ 458 0022 43F00803 		orr	r3, r3, #8
+ 459 0026 2362     		str	r3, [r4, #32]
+ 460 0028 EDE7     		b	.L13
+ 461              	.L16:
+ 462 002a 00BF     		.align	2
+ 463              	.L15:
+ 464 002c 00000000 		.word	.LANCHOR0
+ 465 0030 00380140 		.word	1073821696
+ 466              		.cfi_endproc
+ 467              	.LFE131:
+ 469              		.section	.text.putch,"ax",%progbits
+ 470              		.align	1
+ 471              		.global	putch
+ 472              		.syntax unified
+ 473              		.thumb
+ 474              		.thumb_func
+ 475              		.fpu softvfp
+ 477              	putch:
+ 478              	.LVL13:
+ 479              	.LFB132:
+ 125:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+ 126:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** void putch(char c)
+ 127:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+ 480              		.loc 1 127 1 is_stmt 1 view -0
+ 481              		.cfi_startproc
+ 482              		@ args = 0, pretend = 0, frame = 8
+ 483              		@ frame_needed = 0, uses_anonymous_args = 0
+ 128:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   uint8_t d  = c;
+ 484              		.loc 1 128 3 view .LVU126
+ 127:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   uint8_t d  = c;
+ 485              		.loc 1 127 1 is_stmt 0 view .LVU127
+ 486 0000 07B5     		push	{r0, r1, r2, lr}
+ 487              	.LCFI12:
+ 488              		.cfi_def_cfa_offset 16
+ 489              		.cfi_offset 14, -4
+ 129:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   HAL_UART_Transmit(&UartHandle,  &d, 1, 5000);
+ 490              		.loc 1 129 3 view .LVU128
+ 491 0002 41F28833 		movw	r3, #5000
+ 128:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****   uint8_t d  = c;
+ 492              		.loc 1 128 11 view .LVU129
+ 493 0006 8DF80700 		strb	r0, [sp, #7]
+ 494              		.loc 1 129 3 is_stmt 1 view .LVU130
+ 495 000a 0122     		movs	r2, #1
+ 496 000c 0DF10701 		add	r1, sp, #7
+ 497 0010 0248     		ldr	r0, .L18
+ 498              	.LVL14:
+ 499              		.loc 1 129 3 is_stmt 0 view .LVU131
+ 500 0012 FFF7FEFF 		bl	HAL_UART_Transmit
+ 501              	.LVL15:
+ 130:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** }
+ 502              		.loc 1 130 1 view .LVU132
+ 503 0016 03B0     		add	sp, sp, #12
+ 504              	.LCFI13:
+ 505              		.cfi_def_cfa_offset 4
+ 506              		@ sp needed
+ 507 0018 5DF804FB 		ldr	pc, [sp], #4
+ 508              	.L19:
+ 509              		.align	2
+ 510              	.L18:
+ 511 001c 00000000 		.word	.LANCHOR0
+ 512              		.cfi_endproc
+ 513              	.LFE132:
+ 515              		.section	.text.change_err_led,"ax",%progbits
+ 516              		.align	1
+ 517              		.global	change_err_led
+ 518              		.syntax unified
+ 519              		.thumb
+ 520              		.thumb_func
+ 521              		.fpu softvfp
+ 523              	change_err_led:
+ 524              	.LVL16:
+ 525              	.LFB133:
+ 131:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** #if (PLATFORM==CWLITEARM)
+ 132:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** void change_err_led(unsigned int x)
+ 133:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+ 526              		.loc 1 133 1 is_stmt 1 view -0
+ 527              		.cfi_startproc
+ 528              		@ args = 0, pretend = 0, frame = 0
+ 529              		@ frame_needed = 0, uses_anonymous_args = 0
+ 530              		@ link register save eliminated.
+ 134:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****     if (x)
+ 531              		.loc 1 134 5 view .LVU134
+ 532              		.loc 1 134 8 is_stmt 0 view .LVU135
+ 533 0000 28B1     		cbz	r0, .L21
+ 135:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****          HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
+ 534              		.loc 1 135 10 is_stmt 1 view .LVU136
+ 535 0002 0022     		movs	r2, #0
+ 536              	.L22:
+ 136:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****     else
+ 137:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****          HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
+ 537              		.loc 1 137 10 is_stmt 0 view .LVU137
+ 538 0004 0348     		ldr	r0, .L23
+ 539              	.LVL17:
+ 540              		.loc 1 137 10 view .LVU138
+ 541 0006 4FF40051 		mov	r1, #8192
+ 542 000a FFF7FEBF 		b	HAL_GPIO_WritePin
+ 543              	.LVL18:
+ 544              	.L21:
+ 545              		.loc 1 137 10 is_stmt 1 view .LVU139
+ 546 000e 0122     		movs	r2, #1
+ 547 0010 F8E7     		b	.L22
+ 548              	.L24:
+ 549 0012 00BF     		.align	2
+ 550              	.L23:
+ 551 0014 00080048 		.word	1207961600
+ 552              		.cfi_endproc
+ 553              	.LFE133:
+ 555              		.section	.text.change_ok_led,"ax",%progbits
+ 556              		.align	1
+ 557              		.global	change_ok_led
+ 558              		.syntax unified
+ 559              		.thumb
+ 560              		.thumb_func
+ 561              		.fpu softvfp
+ 563              	change_ok_led:
+ 564              	.LVL19:
+ 565              	.LFB134:
+ 138:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** }
+ 139:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** 
+ 140:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** void change_ok_led(unsigned int x)
+ 141:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c **** {
+ 566              		.loc 1 141 1 view -0
+ 567              		.cfi_startproc
+ 568              		@ args = 0, pretend = 0, frame = 0
+ 569              		@ frame_needed = 0, uses_anonymous_args = 0
+ 570              		@ link register save eliminated.
+ 142:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      if (x)
+ 571              		.loc 1 142 6 view .LVU141
+ 572              		.loc 1 142 9 is_stmt 0 view .LVU142
+ 573 0000 28B1     		cbz	r0, .L26
+ 143:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****           HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, RESET);
+ 574              		.loc 1 143 11 is_stmt 1 view .LVU143
+ 575 0002 0022     		movs	r2, #0
+ 576              	.L27:
+ 144:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****      else
+ 145:/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3_hal.c ****           HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, SET);
+ 577              		.loc 1 145 11 is_stmt 0 view .LVU144
+ 578 0004 0348     		ldr	r0, .L28
+ 579              	.LVL20:
+ 580              		.loc 1 145 11 view .LVU145
+ 581 0006 4FF48041 		mov	r1, #16384
+ 582 000a FFF7FEBF 		b	HAL_GPIO_WritePin
+ 583              	.LVL21:
+ 584              	.L26:
+ 585              		.loc 1 145 11 is_stmt 1 view .LVU146
+ 586 000e 0122     		movs	r2, #1
+ 587 0010 F8E7     		b	.L27
+ 588              	.L29:
+ 589 0012 00BF     		.align	2
+ 590              	.L28:
+ 591 0014 00080048 		.word	1207961600
+ 592              		.cfi_endproc
+ 593              	.LFE134:
+ 595              		.global	UartHandle
+ 596              		.bss
+ 597              		.align	2
+ 598              		.set	.LANCHOR0,. + 0
+ 601              	UartHandle:
+ 602 0000 00000000 		.space	112
+ 602      00000000 
+ 602      00000000 
+ 602      00000000 
+ 602      00000000 
+ 603              		.text
+ 604              	.Letext0:
+ 605              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 606              		.file 3 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/CMSIS/device/stm32f303xc.h"
+ 607              		.file 4 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/CMSIS/device/stm32f3xx.h"
+ 608              		.file 5 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3xx_hal_def.h"
+ 609              		.file 6 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3xx_hal_rcc.h"
+ 610              		.file 7 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3xx_hal_gpio.h"
+ 611              		.file 8 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3xx_hal_dma.h"
+ 612              		.file 9 "/home/ms/chipwhisperer/hardware/victims/firmware/hal/stm32f3/stm32f3xx_hal_uart.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f3_hal.c
+     /tmp/ccYDQOLC.s:16     .text.platform_init:0000000000000000 $t
+     /tmp/ccYDQOLC.s:24     .text.platform_init:0000000000000000 platform_init
+     /tmp/ccYDQOLC.s:145    .text.platform_init:0000000000000078 $d
+     /tmp/ccYDQOLC.s:151    .text.init_uart:0000000000000000 $t
+     /tmp/ccYDQOLC.s:158    .text.init_uart:0000000000000000 init_uart
+     /tmp/ccYDQOLC.s:267    .text.init_uart:0000000000000070 $d
+     /tmp/ccYDQOLC.s:274    .text.trigger_setup:0000000000000000 $t
+     /tmp/ccYDQOLC.s:281    .text.trigger_setup:0000000000000000 trigger_setup
+     /tmp/ccYDQOLC.s:353    .text.trigger_setup:0000000000000044 $d
+     /tmp/ccYDQOLC.s:358    .text.trigger_high:0000000000000000 $t
+     /tmp/ccYDQOLC.s:365    .text.trigger_high:0000000000000000 trigger_high
+     /tmp/ccYDQOLC.s:382    .text.trigger_low:0000000000000000 $t
+     /tmp/ccYDQOLC.s:389    .text.trigger_low:0000000000000000 trigger_low
+     /tmp/ccYDQOLC.s:406    .text.getch:0000000000000000 $t
+     /tmp/ccYDQOLC.s:413    .text.getch:0000000000000000 getch
+     /tmp/ccYDQOLC.s:464    .text.getch:000000000000002c $d
+     /tmp/ccYDQOLC.s:470    .text.putch:0000000000000000 $t
+     /tmp/ccYDQOLC.s:477    .text.putch:0000000000000000 putch
+     /tmp/ccYDQOLC.s:511    .text.putch:000000000000001c $d
+     /tmp/ccYDQOLC.s:516    .text.change_err_led:0000000000000000 $t
+     /tmp/ccYDQOLC.s:523    .text.change_err_led:0000000000000000 change_err_led
+     /tmp/ccYDQOLC.s:551    .text.change_err_led:0000000000000014 $d
+     /tmp/ccYDQOLC.s:556    .text.change_ok_led:0000000000000000 $t
+     /tmp/ccYDQOLC.s:563    .text.change_ok_led:0000000000000000 change_ok_led
+     /tmp/ccYDQOLC.s:591    .text.change_ok_led:0000000000000014 $d
+     /tmp/ccYDQOLC.s:601    .bss:0000000000000000 UartHandle
+     /tmp/ccYDQOLC.s:597    .bss:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_GPIO_Init
+HAL_GPIO_WritePin
+HAL_UART_Init
+HAL_UART_Receive
+HAL_UART_Transmit

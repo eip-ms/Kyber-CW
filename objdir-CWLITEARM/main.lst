@@ -1,0 +1,195 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"main.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.kyber_handle,"ax",%progbits
+  16              		.align	1
+  17              		.global	kyber_handle
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	kyber_handle:
+  25              	.LVL0:
+  26              	.LFB0:
+  27              		.file 1 "main.c"
+   1:main.c        **** #include <stdint.h>
+   2:main.c        **** #include <stdlib.h>
+   3:main.c        **** #include <kyber-c/kem.h>
+   4:main.c        **** 
+   5:main.c        **** #include "simpleserial.h"
+   6:main.c        **** 
+   7:main.c        **** #define SS_VER SS_VER_2_1
+   8:main.c        **** 
+   9:main.c        **** uint8_t kyber_handle(uint8_t cmd, uint8_t scmd, uint8_t len, uint8_t *buf)
+  10:main.c        **** {
+  28              		.loc 1 10 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 3616
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  11:main.c        **** 	 uint8_t pk[CRYPTO_PUBLICKEYBYTES];
+  32              		.loc 1 11 3 view .LVU1
+  12:main.c        **** 	 uint8_t sk[CRYPTO_SECRETKEYBYTES];
+  33              		.loc 1 12 3 view .LVU2
+  13:main.c        **** 	 uint8_t ct[CRYPTO_CIPHERTEXTBYTES];
+  34              		.loc 1 13 3 view .LVU3
+  14:main.c        **** 	 uint8_t key_a[CRYPTO_BYTES];
+  35              		.loc 1 14 3 view .LVU4
+  15:main.c        **** 	 uint8_t key_b[CRYPTO_BYTES];
+  36              		.loc 1 15 3 view .LVU5
+  16:main.c        **** 
+  17:main.c        **** 	//generate keys
+  18:main.c        **** 	crypto_kem_keypair(&pk, &sk);
+  37              		.loc 1 18 2 view .LVU6
+  10:main.c        **** 	 uint8_t pk[CRYPTO_PUBLICKEYBYTES];
+  38              		.loc 1 10 1 is_stmt 0 view .LVU7
+  39 0000 10B5     		push	{r4, lr}
+  40              	.LCFI0:
+  41              		.cfi_def_cfa_offset 8
+  42              		.cfi_offset 4, -8
+  43              		.cfi_offset 14, -4
+  44 0002 ADF5626D 		sub	sp, sp, #3616
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 3624
+  10:main.c        **** 	 uint8_t pk[CRYPTO_PUBLICKEYBYTES];
+  47              		.loc 1 10 1 view .LVU8
+  48 0006 0C46     		mov	r4, r1
+  49              		.loc 1 18 2 view .LVU9
+  50 0008 08A8     		add	r0, sp, #32
+  51              	.LVL1:
+  52              		.loc 1 18 2 view .LVU10
+  53 000a 0DF59861 		add	r1, sp, #1216
+  54              	.LVL2:
+  55              		.loc 1 18 2 view .LVU11
+  56 000e FFF7FEFF 		bl	pqcrystals_kyber768_ref_keypair
+  57              	.LVL3:
+  19:main.c        **** 
+  20:main.c        **** 	trigger_high();
+  58              		.loc 1 20 2 is_stmt 1 view .LVU12
+  59 0012 FFF7FEFF 		bl	trigger_high
+  60              	.LVL4:
+  21:main.c        **** 
+  22:main.c        **** 	crypto_kem_enc(scmd, key_b, pk);
+  61              		.loc 1 22 2 view .LVU13
+  62 0016 08AA     		add	r2, sp, #32
+  63 0018 6946     		mov	r1, sp
+  64 001a 2046     		mov	r0, r4
+  65 001c FFF7FEFF 		bl	pqcrystals_kyber768_ref_enc
+  66              	.LVL5:
+  23:main.c        **** 
+  24:main.c        **** 	trigger_low();
+  67              		.loc 1 24 2 view .LVU14
+  68 0020 FFF7FEFF 		bl	trigger_low
+  69              	.LVL6:
+  25:main.c        **** }
+  70              		.loc 1 25 1 is_stmt 0 view .LVU15
+  71 0024 0DF5626D 		add	sp, sp, #3616
+  72              	.LCFI2:
+  73              		.cfi_def_cfa_offset 8
+  74              		@ sp needed
+  75 0028 10BD     		pop	{r4, pc}
+  76              		.cfi_endproc
+  77              	.LFE0:
+  79              		.section	.text.startup.main,"ax",%progbits
+  80              		.align	1
+  81              		.global	main
+  82              		.syntax unified
+  83              		.thumb
+  84              		.thumb_func
+  85              		.fpu softvfp
+  87              	main:
+  88              	.LFB1:
+  26:main.c        **** 
+  27:main.c        **** int main()
+  28:main.c        **** {
+  89              		.loc 1 28 1 is_stmt 1 view -0
+  90              		.cfi_startproc
+  91              		@ Volatile: function does not return.
+  92              		@ args = 0, pretend = 0, frame = 0
+  93              		@ frame_needed = 0, uses_anonymous_args = 0
+  29:main.c        **** 	platform_init();
+  94              		.loc 1 29 2 view .LVU17
+  28:main.c        **** 	platform_init();
+  95              		.loc 1 28 1 is_stmt 0 view .LVU18
+  96 0000 08B5     		push	{r3, lr}
+  97              	.LCFI3:
+  98              		.cfi_def_cfa_offset 8
+  99              		.cfi_offset 3, -8
+ 100              		.cfi_offset 14, -4
+ 101              		.loc 1 29 2 view .LVU19
+ 102 0002 FFF7FEFF 		bl	platform_init
+ 103              	.LVL7:
+  30:main.c        **** 	init_uart();
+ 104              		.loc 1 30 2 is_stmt 1 view .LVU20
+ 105 0006 FFF7FEFF 		bl	init_uart
+ 106              	.LVL8:
+  31:main.c        **** 
+  32:main.c        **** 	trigger_setup();
+ 107              		.loc 1 32 2 view .LVU21
+ 108 000a FFF7FEFF 		bl	trigger_setup
+ 109              	.LVL9:
+  33:main.c        **** 
+  34:main.c        **** 	simpleserial_init();
+ 110              		.loc 1 34 2 view .LVU22
+ 111 000e FFF7FEFF 		bl	simpleserial_init
+ 112              	.LVL10:
+  35:main.c        **** 
+  36:main.c        **** 	simpleserial_addcmd('p', 16, kyber_handle);
+ 113              		.loc 1 36 2 view .LVU23
+ 114 0012 044A     		ldr	r2, .L4
+ 115 0014 1021     		movs	r1, #16
+ 116 0016 7020     		movs	r0, #112
+ 117 0018 FFF7FEFF 		bl	simpleserial_addcmd
+ 118              	.LVL11:
+ 119              	.L3:
+  37:main.c        **** 
+  38:main.c        **** 	while(1)
+ 120              		.loc 1 38 2 discriminator 1 view .LVU24
+  39:main.c        **** 		simpleserial_get();	
+ 121              		.loc 1 39 3 discriminator 1 view .LVU25
+ 122 001c FFF7FEFF 		bl	simpleserial_get
+ 123              	.LVL12:
+  38:main.c        **** 		simpleserial_get();	
+ 124              		.loc 1 38 7 discriminator 1 view .LVU26
+ 125 0020 FCE7     		b	.L3
+ 126              	.L5:
+ 127 0022 00BF     		.align	2
+ 128              	.L4:
+ 129 0024 00000000 		.word	kyber_handle
+ 130              		.cfi_endproc
+ 131              	.LFE1:
+ 133              		.text
+ 134              	.Letext0:
+ 135              		.file 2 "/home/ms/chipwhisperer/hardware/victims/firmware/simpleserial/simpleserial.h"
+ 136              		.file 3 "./kyber-c/kem.h"
+ 137              		.file 4 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/ccx4qu3w.s:16     .text.kyber_handle:0000000000000000 $t
+     /tmp/ccx4qu3w.s:24     .text.kyber_handle:0000000000000000 kyber_handle
+     /tmp/ccx4qu3w.s:80     .text.startup.main:0000000000000000 $t
+     /tmp/ccx4qu3w.s:87     .text.startup.main:0000000000000000 main
+     /tmp/ccx4qu3w.s:129    .text.startup.main:0000000000000024 $d
+
+UNDEFINED SYMBOLS
+pqcrystals_kyber768_ref_keypair
+trigger_high
+pqcrystals_kyber768_ref_enc
+trigger_low
+platform_init
+init_uart
+trigger_setup
+simpleserial_init
+simpleserial_addcmd
+simpleserial_get
